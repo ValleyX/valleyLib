@@ -1,9 +1,12 @@
 package com.vcs.valleylib.core.command.group;
 
 import com.vcs.valleylib.core.command.Command;
+import com.vcs.valleylib.core.subsystem.Subsystem;
 
 import java.util.ArrayDeque;
+import java.util.LinkedHashSet;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * Runs commands one after another in sequence.
@@ -35,6 +38,25 @@ public class SequentialCommandGroup implements Command {
             current = commands.poll();
             if (current != null) current.initialize();
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        if (interrupted && current != null) {
+            current.end(true);
+        }
+    }
+
+    @Override
+    public Set<Subsystem> getRequirements() {
+        Set<Subsystem> requirements = new LinkedHashSet<>();
+        if (current != null) {
+            requirements.addAll(current.getRequirements());
+        }
+        for (Command command : commands) {
+            requirements.addAll(command.getRequirements());
+        }
+        return requirements;
     }
 
     @Override

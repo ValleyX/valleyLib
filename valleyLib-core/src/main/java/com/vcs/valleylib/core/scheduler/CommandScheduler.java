@@ -82,7 +82,8 @@ public final class CommandScheduler {
         // Schedule default commands if subsystem is idle
         for (Subsystem subsystem : subsystems) {
             Command defaultCmd = subsystem.getDefaultCommand();
-            if (defaultCmd != null && !scheduledCommands.contains(defaultCmd)) {
+            boolean subsystemBusy = requirements.containsKey(subsystem);
+            if (defaultCmd != null && !subsystemBusy && !scheduledCommands.contains(defaultCmd)) {
                 schedule(defaultCmd);
             }
         }

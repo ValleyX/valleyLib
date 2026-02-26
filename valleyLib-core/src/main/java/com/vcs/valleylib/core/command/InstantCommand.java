@@ -18,6 +18,11 @@ public class InstantCommand implements Command {
     }
 
     @Override
+    public void initialize() {
+        hasRun = false;
+    }
+
+    @Override
     public void execute() {
         if (!hasRun) {
             action.run();
