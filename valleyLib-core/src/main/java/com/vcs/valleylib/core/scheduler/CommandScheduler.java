@@ -55,6 +55,10 @@ public final class CommandScheduler {
      * @param command command to schedule
      */
     public void schedule(Command command) {
+        if (scheduledCommands.contains(command)) {
+            return;
+        }
+
         for (Subsystem req : command.getRequirements()) {
             if (requirements.containsKey(req)) {
                 cancel(requirements.get(req));
@@ -82,7 +86,9 @@ public final class CommandScheduler {
         // Schedule default commands if subsystem is idle
         for (Subsystem subsystem : subsystems) {
             Command defaultCmd = subsystem.getDefaultCommand();
-            if (defaultCmd != null && !scheduledCommands.contains(defaultCmd)) {
+            if (defaultCmd != null
+                    && !scheduledCommands.contains(defaultCmd)
+                    && !requirements.containsKey(subsystem)) {
                 schedule(defaultCmd);
             }
         }
