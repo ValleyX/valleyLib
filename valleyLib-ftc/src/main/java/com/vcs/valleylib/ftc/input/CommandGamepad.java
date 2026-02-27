@@ -37,4 +37,17 @@ public class CommandGamepad extends CommandXboxLike {
                 .withTriggerDeadband(0.05)
                 .withTriggerExponent(1.5);
     }
+
+
+    /**
+     * Preset for PlayStation-style drivers using the same FTC gamepad mapping.
+     */
+    public static CommandGamepad forDualShockLike(Gamepad gamepad) {
+        return (CommandGamepad) new CommandGamepad(gamepad)
+                .withStickDeadband(0.07)
+                .withStickExponent(1.6)
+                .withTriggerDeadband(0.04)
+                .withTriggerExponent(1.4);
+    }
+
 }

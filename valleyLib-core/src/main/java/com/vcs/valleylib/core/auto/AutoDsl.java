@@ -35,9 +35,23 @@ public final class AutoDsl {
             return this;
         }
 
+        /**
+         * Compatibility alias for teams that prefer add-step naming.
+         */
+        public AutoBuilder add(Command command) {
+            return command(command);
+        }
+
         public AutoBuilder run(Runnable action) {
             steps.add(new InstantCommand(action));
             return this;
+        }
+
+        /**
+         * Compatibility alias for instant-action naming used in some DSLs.
+         */
+        public AutoBuilder doInstant(Runnable action) {
+            return run(action);
         }
 
         /**
@@ -53,6 +67,13 @@ public final class AutoDsl {
             return this;
         }
 
+        /**
+         * Compatibility alias for waitSeconds.
+         */
+        public AutoBuilder waitFor(double seconds) {
+            return waitSeconds(seconds);
+        }
+
         public AutoBuilder when(BooleanSupplier condition, Command command) {
             steps.add(command.unless(() -> !condition.getAsBoolean()));
             return this;
@@ -61,6 +82,13 @@ public final class AutoDsl {
         public AutoBuilder either(BooleanSupplier condition, Command onTrue, Command onFalse) {
             steps.add(new ConditionalCommand(condition, onTrue, onFalse));
             return this;
+        }
+
+        /**
+         * Compatibility alias for either(...).
+         */
+        public AutoBuilder ifElse(BooleanSupplier condition, Command onTrue, Command onFalse) {
+            return either(condition, onTrue, onFalse);
         }
 
         public AutoBuilder parallel(Command... commands) {
