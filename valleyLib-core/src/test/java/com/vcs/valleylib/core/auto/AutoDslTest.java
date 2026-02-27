@@ -26,6 +26,26 @@ class AutoDslTest {
         assertEquals(List.of("start", "middle", "end"), events);
     }
 
+
+    @Test
+    void autoBuilderSupportsCompatibilityAliases() {
+        List<String> events = new ArrayList<>();
+        AtomicBoolean branch = new AtomicBoolean(false);
+
+        Command auto = AutoDsl.auto(builder -> builder
+                .doInstant(() -> events.add("start"))
+                .add(new OneShotCommand(() -> events.add("added")))
+                .waitFor(0.0)
+                .ifElse(branch::get,
+                        new OneShotCommand(() -> events.add("if-true")),
+                        new OneShotCommand(() -> events.add("if-false")))
+        );
+
+        runToCompletion(auto);
+
+        assertEquals(List.of("start", "added", "if-false"), events);
+    }
+
     @Test
     void autoBuilderSupportsConditionalsAndMarkers() {
         List<String> events = new ArrayList<>();

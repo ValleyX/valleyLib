@@ -98,6 +98,14 @@ public class CommandXboxLike {
     public Trigger dpadLeft() { return new Trigger(dpadLeft); }
     public Trigger dpadRight() { return new Trigger(dpadRight); }
 
+    // PlayStation-style aliases for broader controller vocabulary.
+    public Trigger cross() { return a(); }
+    public Trigger circle() { return b(); }
+    public Trigger square() { return x(); }
+    public Trigger triangle() { return y(); }
+    public Trigger l1() { return leftBumper(); }
+    public Trigger r1() { return rightBumper(); }
+
     public Trigger leftTriggerButton(double threshold) {
         return new Trigger(() -> leftTrigger() >= threshold);
     }
