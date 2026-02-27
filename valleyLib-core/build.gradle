@@ -11,6 +11,7 @@ java {
 }
 
 dependencies {
+    implementation libs.annotation.jvm
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 }
 

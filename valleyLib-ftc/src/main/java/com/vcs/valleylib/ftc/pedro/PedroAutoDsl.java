@@ -4,6 +4,8 @@ import com.pedropathing.paths.PathChain;
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.command.Commands;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -15,7 +17,8 @@ public final class PedroAutoDsl {
 
     private PedroAutoDsl() {}
 
-    public static Command auto(PedroSubsystem drive, Consumer<Builder> block) {
+    @androidx.annotation.NonNull
+    public static Command auto(PedroSubsystem drive, @androidx.annotation.NonNull Consumer<Builder> block) {
         Builder builder = new Builder(drive);
         block.accept(builder);
         return builder.build();
@@ -65,6 +68,8 @@ public final class PedroAutoDsl {
             return this;
         }
 
+        @androidx.annotation.NonNull
+        @Contract(" -> new")
         public Command build() {
             return Commands.sequence(timeline.toArray(new Command[0]));
         }

@@ -10,11 +10,11 @@ import java.util.Map;
 
 /**
  * Unified telemetry system.
- *
+ * <p>
  * Sends the same data to:
  *  - FTC Driver Station telemetry
  *  - Panels telemetry dashboard
- *
+ * <p>
  * Prevents duplicated logging code and keeps outputs consistent.
  */
 public class FtcTelemetryBus {

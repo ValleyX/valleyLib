@@ -1,5 +1,7 @@
 package com.vcs.valleylib.core.command;
 
+import androidx.annotation.NonNull;
+
 import com.vcs.valleylib.core.command.decorators.BeforeStartingCommand;
 import com.vcs.valleylib.core.command.decorators.DeadlineCommand;
 import com.vcs.valleylib.core.command.decorators.FinallyCommand;
@@ -18,15 +20,15 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Represents a unit of robot behavior.
- *
+ * <p>
  * Commands are scheduled by the CommandScheduler and are responsible for
  * controlling one or more Subsystems for some period of time.
- *
+ * <p>
  * Lifecycle:
  *  - initialize(): called once when scheduled
  *  - execute(): called every scheduler cycle while active
  *  - end(): called once when finished or interrupted
- *
+ * <p>
  * Commands may declare subsystem requirements to prevent motor/resource conflicts.
  */
 public interface Command {
@@ -99,14 +101,14 @@ public interface Command {
         return new RepeatCommand(this);
     }
 
-    default Command alongWith(Command... others) {
+    default Command alongWith(@NonNull Command... others) {
         Command[] all = new Command[others.length + 1];
         all[0] = this;
         System.arraycopy(others, 0, all, 1, others.length);
         return new ParallelCommandGroup(all);
     }
 
-    default Command raceWith(Command... others) {
+    default Command raceWith(@NonNull Command... others) {
         Command[] all = new Command[others.length + 1];
         all[0] = this;
         System.arraycopy(others, 0, all, 1, others.length);
@@ -121,7 +123,7 @@ public interface Command {
         return andThen(new InstantCommand(action));
     }
 
-    default Command andThen(Command... nextCommands) {
+    default Command andThen(@NonNull Command... nextCommands) {
         Command[] all = new Command[nextCommands.length + 1];
         all[0] = this;
         System.arraycopy(nextCommands, 0, all, 1, nextCommands.length);

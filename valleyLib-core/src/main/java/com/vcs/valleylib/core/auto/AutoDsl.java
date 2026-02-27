@@ -1,5 +1,7 @@
 package com.vcs.valleylib.core.auto;
 
+import androidx.annotation.NonNull;
+
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.command.InstantCommand;
 import com.vcs.valleylib.core.command.WaitCommand;
@@ -7,6 +9,8 @@ import com.vcs.valleylib.core.command.decorators.DeadlineCommand;
 import com.vcs.valleylib.core.command.decorators.ParallelCommandGroup;
 import com.vcs.valleylib.core.command.decorators.RaceCommand;
 import com.vcs.valleylib.core.command.decorators.SequentialCommandGroup;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,8 @@ public final class AutoDsl {
 
     private AutoDsl() {}
 
-    public static Command auto(Consumer<AutoBuilder> block) {
+    @androidx.annotation.NonNull
+    public static Command auto(@NonNull Consumer<AutoBuilder> block) {
         AutoBuilder builder = new AutoBuilder();
         block.accept(builder);
         return builder.build();
@@ -74,7 +79,8 @@ public final class AutoDsl {
             return waitSeconds(seconds);
         }
 
-        public AutoBuilder when(BooleanSupplier condition, Command command) {
+        @Contract("_, _ -> this")
+        public AutoBuilder when(BooleanSupplier condition, @NonNull Command command) {
             steps.add(command.unless(() -> !condition.getAsBoolean()));
             return this;
         }
@@ -106,6 +112,8 @@ public final class AutoDsl {
             return this;
         }
 
+        @NonNull
+        @Contract(" -> new")
         public Command build() {
             return new SequentialCommandGroup(steps.toArray(new Command[0]));
         }
@@ -146,6 +154,7 @@ public final class AutoDsl {
             return active.isFinished();
         }
 
+        @NonNull
         @Override
         public java.util.Set<com.vcs.valleylib.core.subsystem.Subsystem> getRequirements() {
             java.util.Set<com.vcs.valleylib.core.subsystem.Subsystem> requirements = new java.util.LinkedHashSet<>();

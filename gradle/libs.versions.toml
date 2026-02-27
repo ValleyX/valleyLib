@@ -10,6 +10,7 @@ appcompat = "1.7.1"
 material = "1.13.0"
 robotserver = "11.1.0"
 telemetry = "1.0.0"
+annotationJvm = "1.9.1"
 
 [libraries]
 ftc = { module = "com.pedropathing:ftc", version.ref = "ftc" }
@@ -25,6 +26,7 @@ robotcore = { module = "org.firstinspires.ftc:RobotCore", version.ref = "robotse
 robotserver = { module = "org.firstinspires.ftc:RobotServer", version.ref = "robotserver" }
 telemetry = { module = "com.pedropathing:telemetry", version.ref = "telemetry" }
 xx = { module = "org.firstinspires.ftc:*" }
+annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
