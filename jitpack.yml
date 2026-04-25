@@ -1,0 +1,7 @@
+jdk:
+  - openjdk11
+before_install:
+  - chmod +x gradlew
+install:
+  - ./gradlew :valleyLib-core:publishToMavenLocal
+  - ./gradlew :valleyLib-ftc:publishToMavenLocal

@@ -8,13 +8,14 @@ Add the following to your `build.gradle` (Module: teamcode):
 
 ```gradle
 repositories {
-    maven { url = uri("https://mymaven.bylazar.com/releases") }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.vcs:valleyLib-ftc:1.0.0'
+    implementation 'com.github.USERNAME:ValleyLib:ftc:Tag'
 }
 ```
+*(Replace `USERNAME` with your GitHub username and `Tag` with a release tag like `1.0.0`)*
 
 ## 2. Define a Subsystem
 

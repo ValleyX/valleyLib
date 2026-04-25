@@ -5,10 +5,23 @@ ValleyLib is a modern, command-based robotics library for FTC, heavily inspired 
 - `valleyLib-core`: Platform-agnostic scheduler, command, and subsystem abstractions.
 - `valleyLib-ftc`: FTC-specific integration layers, input handling, and utilities.
 
-### Maven Coordinates
-ValleyLib is published to our private repository:
-- **Core**: `com.vcs.valleylib:core:1.0.0`
-- **FTC**: `com.vcs.valleylib:ftc:1.0.0`
+### JitPack Setup
+To use ValleyLib in your project, add the JitPack repository to your `settings.gradle` or `build.gradle`:
+
+```gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+```
+
+Then add the dependencies:
+```gradle
+dependencies {
+    implementation 'com.github.USERNAME:ValleyLib:core:Tag'
+    implementation 'com.github.USERNAME:ValleyLib:ftc:Tag'
+}
+```
+*(Replace `USERNAME` with your GitHub username and `Tag` with a release tag like `1.0.0`)*
 
 ## Documentation
 
