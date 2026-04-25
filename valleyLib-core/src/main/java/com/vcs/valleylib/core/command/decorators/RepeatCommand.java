@@ -18,4 +18,9 @@ public class RepeatCommand extends CommandWrapper {
         }
     }
 
+    @Override
+    protected boolean onIsFinished() {
+        return false;
+    }
+
 }

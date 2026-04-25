@@ -1,6 +1,5 @@
 package com.vcs.valleylib.ftc.telemetry;
 
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;

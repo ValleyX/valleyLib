@@ -8,10 +8,10 @@ import java.util.List;
  */
 public class TriggerManager {
 
-    private final List<Runnable> bindings = new ArrayList<>();
+    private final List<Trigger> triggers = new ArrayList<>();
 
     public Trigger bind(Trigger trigger) {
-        bindings.addAll(trigger.getBindings());
+        triggers.add(trigger);
         return trigger;
     }
 
@@ -22,12 +22,14 @@ public class TriggerManager {
     }
 
     public void poll() {
-        for (Runnable binding : bindings) {
-            binding.run();
+        for (Trigger trigger : triggers) {
+            for (Runnable binding : trigger.getBindings()) {
+                binding.run();
+            }
         }
     }
 
     public void clear() {
-        bindings.clear();
+        triggers.clear();
     }
 }

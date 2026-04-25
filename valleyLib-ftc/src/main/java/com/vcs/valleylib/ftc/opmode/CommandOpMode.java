@@ -27,7 +27,7 @@ public abstract class CommandOpMode extends OpMode {
         scheduler = CommandScheduler.getInstance();
         telemetryBus = new FtcTelemetryBus(
                 telemetry,
-                PanelsTelemetry.get()
+                PanelsTelemetry.INSTANCE.getTelemetry()
         );
         triggers = new TriggerManager();
         if (enableCommandLogging()) {

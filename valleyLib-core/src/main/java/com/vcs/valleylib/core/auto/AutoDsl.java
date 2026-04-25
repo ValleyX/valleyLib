@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.command.InstantCommand;
 import com.vcs.valleylib.core.command.WaitCommand;
+import com.vcs.valleylib.core.command.decorators.ConditionalCommand;
 import com.vcs.valleylib.core.command.decorators.DeadlineCommand;
 import com.vcs.valleylib.core.command.decorators.ParallelCommandGroup;
 import com.vcs.valleylib.core.command.decorators.RaceCommand;
@@ -116,51 +117,6 @@ public final class AutoDsl {
         @Contract(" -> new")
         public Command build() {
             return new SequentialCommandGroup(steps.toArray(new Command[0]));
-        }
-    }
-
-    private static class ConditionalCommand implements Command {
-
-        private final BooleanSupplier condition;
-        private final Command onTrue;
-        private final Command onFalse;
-
-        private Command active;
-
-        private ConditionalCommand(BooleanSupplier condition, Command onTrue, Command onFalse) {
-            this.condition = condition;
-            this.onTrue = onTrue;
-            this.onFalse = onFalse;
-        }
-
-        @Override
-        public void initialize() {
-            active = condition.getAsBoolean() ? onTrue : onFalse;
-            active.initialize();
-        }
-
-        @Override
-        public void execute() {
-            active.execute();
-        }
-
-        @Override
-        public void end(boolean interrupted) {
-            active.end(interrupted);
-        }
-
-        @Override
-        public boolean isFinished() {
-            return active.isFinished();
-        }
-
-        @NonNull
-        @Override
-        public java.util.Set<com.vcs.valleylib.core.subsystem.Subsystem> getRequirements() {
-            java.util.Set<com.vcs.valleylib.core.subsystem.Subsystem> requirements = new java.util.LinkedHashSet<>();
-            requirements.addAll(onTrue.getRequirements());
-            requirements.addAll(onFalse.getRequirements());
-            return requirements;
         }
     }
 }

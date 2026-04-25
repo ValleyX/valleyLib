@@ -2,6 +2,7 @@ package com.vcs.valleylib.core.command;
 
 import androidx.annotation.NonNull;
 
+import com.vcs.valleylib.core.command.decorators.ConditionalCommand;
 import com.vcs.valleylib.core.command.decorators.DeadlineCommand;
 import com.vcs.valleylib.core.command.decorators.ParallelCommandGroup;
 import com.vcs.valleylib.core.command.decorators.RaceCommand;
@@ -88,6 +89,12 @@ public final class Commands {
     @Contract("_ -> new")
     public static Command race(Command... commands) {
         return new RaceCommand(commands);
+    }
+
+    @NonNull
+    @Contract("_, _, _ -> new")
+    public static Command either(Command onTrue, Command onFalse, BooleanSupplier condition) {
+        return new ConditionalCommand(condition, onTrue, onFalse);
     }
 
     @NonNull

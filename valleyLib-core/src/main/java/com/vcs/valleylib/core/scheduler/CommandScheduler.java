@@ -20,9 +20,9 @@ public final class CommandScheduler {
 
     private static CommandScheduler instance;
 
-    private final Set<Command> scheduledCommands = new HashSet<>();
+    private final Set<Command> scheduledCommands = new LinkedHashSet<>();
     private final Map<Subsystem, Command> requirements = new HashMap<>();
-    private final Set<Subsystem> subsystems = new HashSet<>();
+    private final Set<Subsystem> subsystems = new LinkedHashSet<>();
     private final Set<CommandSchedulerListener> listeners = new LinkedHashSet<>();
 
     private boolean simulationEnabled;
@@ -138,16 +138,20 @@ public final class CommandScheduler {
             }
         }
 
-        // Run active commands
-        Iterator<Command> iterator = scheduledCommands.iterator();
-        while (iterator.hasNext()) {
-            Command command = iterator.next();
+        // Run active commands - use a copy to avoid ConcurrentModificationException
+        // if commands schedule or cancel others during their execution.
+        List<Command> commandsToRun = new ArrayList<>(scheduledCommands);
+        for (Command command : commandsToRun) {
+            if (!scheduledCommands.contains(command)) {
+                continue;
+            }
+
             command.execute();
 
             if (command.isFinished()) {
+                scheduledCommands.remove(command);
                 command.end(false);
                 release(command);
-                iterator.remove();
                 for (CommandSchedulerListener listener : listeners) {
                     listener.onCommandFinished(command);
                 }

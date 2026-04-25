@@ -1,6 +1,7 @@
 package com.vcs.valleylib.core.subsystem;
 
 import com.vcs.valleylib.core.command.Command;
+import com.vcs.valleylib.core.scheduler.CommandScheduler;
 
 /**
  * Base class for all robot subsystems.
@@ -16,6 +17,10 @@ import com.vcs.valleylib.core.command.Command;
 public abstract class Subsystem {
 
     private Command defaultCommand;
+
+    protected Subsystem() {
+        CommandScheduler.getInstance().registerSubsystem(this);
+    }
 
     /**
      * Called every scheduler cycle, regardless of active commands.

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
@@ -43,13 +44,30 @@ public final class PedroAutoDsl {
             return this;
         }
 
+        public Builder add(Command command) {
+            return command(command);
+        }
+
         public Builder action(Runnable runnable) {
             timeline.add(Commands.runOnce(runnable));
             return this;
         }
 
+        public Builder doInstant(Runnable runnable) {
+            return action(runnable);
+        }
+
         public Builder waitSeconds(double seconds) {
             timeline.add(Commands.waitSeconds(seconds));
+            return this;
+        }
+
+        public Builder waitFor(double seconds) {
+            return waitSeconds(seconds);
+        }
+
+        public Builder ifElse(BooleanSupplier condition, Command onTrue, Command onFalse) {
+            timeline.add(Commands.either(onTrue, onFalse, condition));
             return this;
         }
 

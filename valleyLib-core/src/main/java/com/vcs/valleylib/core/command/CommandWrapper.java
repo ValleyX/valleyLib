@@ -29,6 +29,11 @@ public abstract class CommandWrapper extends BaseCommand {
     }
 
     @Override
+    protected boolean onIsFinished() {
+        return inner.isFinished();
+    }
+
+    @Override
     public Set<Subsystem> getRequirements() {
         return new HashSet<>(inner.getRequirements());
     }
