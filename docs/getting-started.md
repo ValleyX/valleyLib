@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.USERNAME:ValleyLib:ftc:Tag'
+    implementation 'com.github.ValleyX:valleyLib:ftc:Tag'
 }
 ```
-*(Replace `USERNAME` with your GitHub username and `Tag` with a release tag like `1.0.0`)*
+*(Replace `Tag` with a release tag like `1.0.0`)*
 
 ## 2. Define a Subsystem
 
