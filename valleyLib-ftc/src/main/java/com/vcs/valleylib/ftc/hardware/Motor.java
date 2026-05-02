@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.vcs.valleylib.ftc.control.PController;
 import com.vcs.valleylib.ftc.control.PIDController;
 import com.vcs.valleylib.ftc.control.wpilibcontroller.SimpleMotorFeedforward;
-import com.arcrobotics.ftclib.hardware.HardwareDevice;
+import com.vcs.valleylib.ftc.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;

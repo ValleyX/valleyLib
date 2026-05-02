@@ -1,4 +1,4 @@
-package com.vcs.valleyLib.ftc.hardware;
+package com.vcs.valleylib.ftc.hardware;
 
 import androidx.annotation.NonNull;
 
