@@ -1,4 +1,4 @@
-package com.arcrobotics.ftclib.hardware.motors;
+package com.vcs.valleyLib.ftc.hardware;
 
 import androidx.annotation.NonNull;
 
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * An extended motor class that utilizes more features than the
  * regular motor.
  *
- * @author Jackson
+ * @author Tanner
  */
 public class MotorEx extends Motor {
 
