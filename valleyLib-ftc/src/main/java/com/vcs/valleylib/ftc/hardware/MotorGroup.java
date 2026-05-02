@@ -1,4 +1,4 @@
-package com.arcrobotics.ftclib.hardware.motors;
+package com.vcs.valleyLib.ftc.hardware;
 
 import androidx.annotation.NonNull;
 
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Allows multiple {@link Motor} objects to be linked together
  * as a single group. Multiple motors will act together.
  *
- * @author Jackson
+ * @author Tanner
  */
 public class MotorGroup extends Motor implements Iterable<Motor> {
 
