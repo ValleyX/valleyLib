@@ -23,6 +23,16 @@ dependencies {
 ```
 *(Replace `Tag` with a release tag like `1.0.0`)*
 
+| Version | Usable?           |
+| ------- | ----------------- |
+| 1.0.0   | No                |
+| 1.0.1   | No                |
+| 1.0.2   | Yes (Depricated)  |
+| 1.0.3   | No                |
+| 1.0.4   | No                |
+| 1.0.5   | No                |
+| 1.0.6   | Yes (Recommended) |
+
 ## Documentation
 
 - [Getting started guide](docs/getting-started.md)
