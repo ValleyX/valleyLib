@@ -9,16 +9,30 @@ import java.util.function.BooleanSupplier;
 
 /**
  * FTC-friendly trigger primitive inspired by WPILib/NextFTC trigger pipelines.
- *
- * Evaluate triggers once per loop by calling {@link TriggerManager#poll()}.
+ * <p>
+ * Binding a command (onTrue, whileTrue, ...) automatically registers the
+ * trigger with {@link TriggerManager#getDefault()}, which CommandOpMode polls
+ * every loop — so bindings work without manual bind() calls. Standalone users
+ * can still poll their own {@link TriggerManager}.
+ * <p>
+ * A Trigger is also a {@link BooleanSupplier}, so it can be passed directly
+ * to command decorators like {@code onlyWhile(...)} and {@code until(...)}.
  */
-public class Trigger {
+public class Trigger implements BooleanSupplier {
 
     private final BooleanSupplier condition;
     private final List<Runnable> bindings = new ArrayList<>();
 
     public Trigger(BooleanSupplier condition) {
         this.condition = condition;
+    }
+
+    /**
+     * @return the current value of the trigger's condition
+     */
+    @Override
+    public boolean getAsBoolean() {
+        return condition.getAsBoolean();
     }
 
     public Trigger and(BooleanSupplier other) {
@@ -50,32 +64,32 @@ public class Trigger {
     }
 
     public Trigger onTrue(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.ON_TRUE));
-        return this;
+        return addBinding(command, TriggerEvent.ON_TRUE);
     }
 
     public Trigger onFalse(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.ON_FALSE));
-        return this;
+        return addBinding(command, TriggerEvent.ON_FALSE);
     }
 
     public Trigger onChange(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.ON_CHANGE));
-        return this;
+        return addBinding(command, TriggerEvent.ON_CHANGE);
     }
 
     public Trigger whileTrue(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.WHILE_TRUE));
-        return this;
+        return addBinding(command, TriggerEvent.WHILE_TRUE);
     }
 
     public Trigger whileFalse(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.WHILE_FALSE));
-        return this;
+        return addBinding(command, TriggerEvent.WHILE_FALSE);
     }
 
     public Trigger toggleOnTrue(Command command) {
-        bindings.add(new TriggerBinding(condition, command, TriggerEvent.TOGGLE_ON_TRUE));
+        return addBinding(command, TriggerEvent.TOGGLE_ON_TRUE);
+    }
+
+    private Trigger addBinding(Command command, TriggerEvent event) {
+        bindings.add(new TriggerBinding(condition, command, event));
+        TriggerManager.getDefault().bind(this);
         return this;
     }
 

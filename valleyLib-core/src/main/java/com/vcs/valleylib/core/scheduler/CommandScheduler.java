@@ -25,6 +25,10 @@ public final class CommandScheduler {
     private final Set<Subsystem> subsystems = new LinkedHashSet<>();
     private final Set<CommandSchedulerListener> listeners = new LinkedHashSet<>();
 
+    // Reused across run() calls to avoid allocating a fresh list every loop,
+    // which adds GC pressure on Android at 50+ Hz loop rates.
+    private final List<Command> runBuffer = new ArrayList<>();
+
     private boolean simulationEnabled;
 
     private CommandScheduler() {}
@@ -138,10 +142,12 @@ public final class CommandScheduler {
             }
         }
 
-        // Run active commands - use a copy to avoid ConcurrentModificationException
-        // if commands schedule or cancel others during their execution.
-        List<Command> commandsToRun = new ArrayList<>(scheduledCommands);
-        for (Command command : commandsToRun) {
+        // Run active commands - iterate over a snapshot to avoid
+        // ConcurrentModificationException if commands schedule or cancel
+        // others during their execution.
+        runBuffer.clear();
+        runBuffer.addAll(scheduledCommands);
+        for (Command command : runBuffer) {
             if (!scheduledCommands.contains(command)) {
                 continue;
             }
@@ -200,6 +206,22 @@ public final class CommandScheduler {
      */
     public boolean isScheduled(Command command) {
         return scheduledCommands.contains(command);
+    }
+
+    /**
+     * Returns an unmodifiable view of the currently scheduled commands,
+     * in scheduling order. Intended for diagnostics and telemetry.
+     */
+    public Set<Command> getScheduledCommands() {
+        return Collections.unmodifiableSet(scheduledCommands);
+    }
+
+    /**
+     * Returns the command currently requiring a subsystem, or null when the
+     * subsystem is idle. Intended for diagnostics and telemetry.
+     */
+    public Command requiring(Subsystem subsystem) {
+        return requirements.get(subsystem);
     }
 
     /**
