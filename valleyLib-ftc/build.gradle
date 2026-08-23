@@ -30,6 +30,13 @@ android {
             withJavadocJar()
         }
     }
+
+    testOptions {
+        // JUnit 5 tests are silently skipped without the platform runner.
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
