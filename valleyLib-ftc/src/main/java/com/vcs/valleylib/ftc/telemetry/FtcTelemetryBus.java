@@ -38,6 +38,16 @@ public class FtcTelemetryBus {
     }
 
     /**
+     * Discards all queued telemetry data without sending it to any output.
+     * <p>
+     * Useful when an OpMode changes phase (e.g. init -> start) and stale
+     * queued values should not be flushed on the next {@link #update()}.
+     */
+    public void clear() {
+        data.clear();
+    }
+
+    /**
      * Flushes all queued telemetry to outputs.
      * Call once per loop.
      */

@@ -21,6 +21,11 @@ public class CommandGamepad extends CommandXboxLike {
                 () -> gamepad.dpad_down,
                 () -> gamepad.dpad_left,
                 () -> gamepad.dpad_right,
+                () -> gamepad.start,
+                () -> gamepad.back,
+                () -> gamepad.guide,
+                () -> gamepad.left_stick_button,
+                () -> gamepad.right_stick_button,
                 () -> gamepad.left_stick_x,
                 () -> gamepad.left_stick_y,
                 () -> gamepad.right_stick_x,
@@ -30,20 +35,44 @@ public class CommandGamepad extends CommandXboxLike {
         );
     }
 
+    // Covariant overrides so fluent configuration keeps the CommandGamepad type.
+    @Override
+    public CommandGamepad withStickDeadband(double deadband) {
+        super.withStickDeadband(deadband);
+        return this;
+    }
+
+    @Override
+    public CommandGamepad withStickExponent(double exponent) {
+        super.withStickExponent(exponent);
+        return this;
+    }
+
+    @Override
+    public CommandGamepad withTriggerDeadband(double deadband) {
+        super.withTriggerDeadband(deadband);
+        return this;
+    }
+
+    @Override
+    public CommandGamepad withTriggerExponent(double exponent) {
+        super.withTriggerExponent(exponent);
+        return this;
+    }
+
     public static CommandGamepad forLogitechF310(Gamepad gamepad) {
-        return (CommandGamepad) new CommandGamepad(gamepad)
+        return new CommandGamepad(gamepad)
                 .withStickDeadband(0.08)
                 .withStickExponent(1.7)
                 .withTriggerDeadband(0.05)
                 .withTriggerExponent(1.5);
     }
 
-
     /**
      * Preset for PlayStation-style drivers using the same FTC gamepad mapping.
      */
     public static CommandGamepad forDualShockLike(Gamepad gamepad) {
-        return (CommandGamepad) new CommandGamepad(gamepad)
+        return new CommandGamepad(gamepad)
                 .withStickDeadband(0.07)
                 .withStickExponent(1.6)
                 .withTriggerDeadband(0.04)

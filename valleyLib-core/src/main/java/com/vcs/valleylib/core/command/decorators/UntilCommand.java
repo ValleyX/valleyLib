@@ -18,4 +18,10 @@ public class UntilCommand extends CommandWrapper {
     protected boolean onIsFinished() {
         return inner.isFinished() || condition.getAsBoolean();
     }
+
+    @Override
+    protected void onEnd(boolean interrupted) {
+        // A command cut short by the condition is interrupted, not finished.
+        inner.end(interrupted || !inner.isFinished());
+    }
 }

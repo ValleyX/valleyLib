@@ -66,6 +66,9 @@ public class Motor implements HardwareDevice {
         private int resetVal, lastPosition;
         private Direction direction;
         private double lastTimeStamp, veloEstimate, dpp, accel, lastVelo;
+        // Acceleration estimation keeps its own timestamp so interleaved
+        // getPosition() calls cannot corrupt its dt.
+        private double accelTimeStamp;
 
         /**
          * The encoder object for the motor.
@@ -81,6 +84,7 @@ public class Motor implements HardwareDevice {
             veloEstimate = 0;
             direction = Direction.FORWARD;
             lastTimeStamp = (double) System.nanoTime() / 1E9;
+            accelTimeStamp = lastTimeStamp;
         }
 
         /**
@@ -152,10 +156,12 @@ public class Motor implements HardwareDevice {
             double velo = getVelocity();
             if (velo != lastVelo) {
                 double currentTime = (double) System.nanoTime() / 1E9;
-                double dt = currentTime - lastTimeStamp;
-                accel = (velo - lastVelo) / dt;
+                double dt = currentTime - accelTimeStamp;
+                if (dt > 1E-6) {
+                    accel = (velo - lastVelo) / dt;
+                }
                 lastVelo = velo;
-                lastTimeStamp = currentTime;
+                accelTimeStamp = currentTime;
             }
             return velo;
         }

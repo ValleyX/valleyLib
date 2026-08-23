@@ -1,0 +1,87 @@
+site_name: ValleyLib
+site_description: A modern, command-based robotics library for FTC, inspired by WPILib and FTCLib.
+site_url: https://valleylib.readthedocs.io/
+repo_url: https://github.com/ValleyX/valleyLib
+repo_name: ValleyX/valleyLib
+edit_uri: edit/master/docs/
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/robot
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home:
+      - index.md
+      - Installation: installation.md
+      - Quickstart: quickstart.md
+  - Command System:
+      - Commands: core/commands.md
+      - Command Decorators: core/decorators.md
+      - Command Groups & Factories: core/command-groups.md
+      - The Command Scheduler: core/scheduler.md
+      - Subsystems: core/subsystems.md
+      - The AutoDsl Builder: core/auto-dsl.md
+  - FTC Integration:
+      - CommandOpMode: ftc/command-opmode.md
+      - Gamepads & Input Shaping: ftc/gamepads.md
+      - Triggers & Button Bindings: ftc/triggers.md
+      - Hardware (Motors & Encoders): ftc/hardware.md
+      - PID & Feedforward Control: ftc/control.md
+      - Telemetry & Command Logging: ftc/telemetry.md
+      - RobotContainer: ftc/robot-container.md
+  - Pedro Pathing:
+      - Command-Based Pedro: pedro/overview.md
+      - PedroAutoDsl: pedro/auto-dsl.md
+      - Migration Guide: pedro/migration.md
+  - Guides:
+      - Writing Custom Commands: guides/custom-commands.md
+      - Desktop Simulation & Testing: guides/simulation-testing.md
+      - Sample Code Walkthrough: guides/samples.md
+  - Reference:
+      - API Summary: reference/api-summary.md
+      - Design Notes: reference/design-notes.md

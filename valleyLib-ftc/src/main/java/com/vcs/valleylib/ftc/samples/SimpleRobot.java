@@ -33,18 +33,21 @@ public class SimpleRobot extends RobotContainer {
 
     @Override
     public void configureBindings() {
-        // Set default drive command (Tank Drive)
-        drive.setDefaultCommand(Commands.run(() ->
+        // Set default drive command (Tank Drive). Using the subsystem's own
+        // run(...) factory means the command requires the drivetrain, so any
+        // other drive command automatically preempts it.
+        drive.setDefaultCommand(drive.run(() ->
                 drive.tankDrive(driver.leftY(), driver.rightY())
         ));
 
-        // Intake control on buttons
-        driver.a().whileTrue(Commands.startEnd(intake::intakeIn, intake::stop));
-        driver.b().whileTrue(Commands.startEnd(intake::intakeOut, intake::stop));
+        // Intake control on buttons. Bindings auto-register with the default
+        // TriggerManager, which CommandOpMode polls every loop.
+        driver.a().whileTrue(intake.startEnd(intake::intakeIn, intake::stop));
+        driver.b().whileTrue(intake.startEnd(intake::intakeOut, intake::stop));
 
         // High-level command composition
         driver.rightBumper().onTrue(
-                Commands.runOnce(intake::intakeIn)
+                intake.runOnce(intake::intakeIn)
                         .andThen(Commands.waitSeconds(0.5))
                         .andThen(intake::stop)
         );
@@ -53,7 +56,7 @@ public class SimpleRobot extends RobotContainer {
     @Override
     public Command getAutonomousCommand() {
         // Example simple autonomous: drive forward then stop
-        return Commands.run(() -> drive.tankDrive(0.5, 0.5))
+        return drive.run(() -> drive.tankDrive(0.5, 0.5))
                 .withTimeout(2.0)
                 .finallyDo(drive::stop);
     }

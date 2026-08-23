@@ -18,6 +18,11 @@ public class CommandXboxLike {
     private final BooleanSupplier dpadDown;
     private final BooleanSupplier dpadLeft;
     private final BooleanSupplier dpadRight;
+    private final BooleanSupplier start;
+    private final BooleanSupplier back;
+    private final BooleanSupplier guide;
+    private final BooleanSupplier leftStickButton;
+    private final BooleanSupplier rightStickButton;
 
     private final DoubleSupplier leftXRaw;
     private final DoubleSupplier leftYRaw;
@@ -49,6 +54,36 @@ public class CommandXboxLike {
             DoubleSupplier leftTriggerRaw,
             DoubleSupplier rightTriggerRaw
     ) {
+        this(a, b, x, y, leftBumper, rightBumper,
+                dpadUp, dpadDown, dpadLeft, dpadRight,
+                () -> false, () -> false, () -> false, () -> false, () -> false,
+                leftXRaw, leftYRaw, rightXRaw, rightYRaw,
+                leftTriggerRaw, rightTriggerRaw);
+    }
+
+    public CommandXboxLike(
+            BooleanSupplier a,
+            BooleanSupplier b,
+            BooleanSupplier x,
+            BooleanSupplier y,
+            BooleanSupplier leftBumper,
+            BooleanSupplier rightBumper,
+            BooleanSupplier dpadUp,
+            BooleanSupplier dpadDown,
+            BooleanSupplier dpadLeft,
+            BooleanSupplier dpadRight,
+            BooleanSupplier start,
+            BooleanSupplier back,
+            BooleanSupplier guide,
+            BooleanSupplier leftStickButton,
+            BooleanSupplier rightStickButton,
+            DoubleSupplier leftXRaw,
+            DoubleSupplier leftYRaw,
+            DoubleSupplier rightXRaw,
+            DoubleSupplier rightYRaw,
+            DoubleSupplier leftTriggerRaw,
+            DoubleSupplier rightTriggerRaw
+    ) {
         this.a = a;
         this.b = b;
         this.x = x;
@@ -59,6 +94,11 @@ public class CommandXboxLike {
         this.dpadDown = dpadDown;
         this.dpadLeft = dpadLeft;
         this.dpadRight = dpadRight;
+        this.start = start;
+        this.back = back;
+        this.guide = guide;
+        this.leftStickButton = leftStickButton;
+        this.rightStickButton = rightStickButton;
         this.leftXRaw = leftXRaw;
         this.leftYRaw = leftYRaw;
         this.rightXRaw = rightXRaw;
@@ -97,6 +137,11 @@ public class CommandXboxLike {
     public Trigger dpadDown() { return new Trigger(dpadDown); }
     public Trigger dpadLeft() { return new Trigger(dpadLeft); }
     public Trigger dpadRight() { return new Trigger(dpadRight); }
+    public Trigger start() { return new Trigger(start); }
+    public Trigger back() { return new Trigger(back); }
+    public Trigger guide() { return new Trigger(guide); }
+    public Trigger leftStickButton() { return new Trigger(leftStickButton); }
+    public Trigger rightStickButton() { return new Trigger(rightStickButton); }
 
     // PlayStation-style aliases for broader controller vocabulary.
     public Trigger cross() { return a(); }
@@ -105,6 +150,11 @@ public class CommandXboxLike {
     public Trigger triangle() { return y(); }
     public Trigger l1() { return leftBumper(); }
     public Trigger r1() { return rightBumper(); }
+    public Trigger options() { return start(); }
+    public Trigger share() { return back(); }
+    public Trigger ps() { return guide(); }
+    public Trigger l3() { return leftStickButton(); }
+    public Trigger r3() { return rightStickButton(); }
 
     public Trigger leftTriggerButton(double threshold) {
         return new Trigger(() -> leftTrigger() >= threshold);

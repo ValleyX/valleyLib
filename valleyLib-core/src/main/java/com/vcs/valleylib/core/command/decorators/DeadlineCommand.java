@@ -12,6 +12,7 @@ public class DeadlineCommand extends BaseCommand {
 
     private final Command deadline;
     private final Command[] others;
+    private final Set<Command> runningOthers = new LinkedHashSet<>();
 
     public DeadlineCommand(Command deadline, Command... others) {
         this.deadline = deadline;
@@ -20,6 +21,8 @@ public class DeadlineCommand extends BaseCommand {
 
     @Override
     protected void onInitialize() {
+        runningOthers.clear();
+        runningOthers.addAll(Arrays.asList(others));
         deadline.initialize();
         for (Command c : others) c.initialize();
     }
@@ -27,7 +30,15 @@ public class DeadlineCommand extends BaseCommand {
     @Override
     protected void onExecute() {
         deadline.execute();
-        for (Command c : others) c.execute();
+        // Others that finish early end naturally and stop executing.
+        runningOthers.removeIf(c -> {
+            c.execute();
+            if (c.isFinished()) {
+                c.end(false);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -37,8 +48,11 @@ public class DeadlineCommand extends BaseCommand {
 
     @Override
     protected void onEnd(boolean interrupted) {
-        deadline.end(interrupted);
-        for (Command c : others) c.end(true);
+        deadline.end(interrupted || !deadline.isFinished());
+        for (Command c : runningOthers) {
+            c.end(true);
+        }
+        runningOthers.clear();
     }
 
     @Override

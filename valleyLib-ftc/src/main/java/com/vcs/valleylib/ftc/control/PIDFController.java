@@ -109,7 +109,11 @@ public class PIDFController {
     public void setSetPoint(double sp) {
         setPoint = sp;
         errorVal_p = setPoint - measuredValue;
-        errorVal_v = (errorVal_p - prevErrorVal) / period;
+        // Before the first calculate() call the period is 0 — avoid a
+        // NaN/Infinity velocity error that would break atSetPoint().
+        errorVal_v = Math.abs(period) > 1E-6
+                ? (errorVal_p - prevErrorVal) / period
+                : 0;
     }
 
     /**

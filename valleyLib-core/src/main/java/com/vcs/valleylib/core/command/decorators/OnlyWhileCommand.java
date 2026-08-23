@@ -18,4 +18,10 @@ public class OnlyWhileCommand extends CommandWrapper {
     protected boolean onIsFinished() {
         return !condition.getAsBoolean() || inner.isFinished();
     }
+
+    @Override
+    protected void onEnd(boolean interrupted) {
+        // A command cut short by the condition is interrupted, not finished.
+        inner.end(interrupted || !inner.isFinished());
+    }
 }

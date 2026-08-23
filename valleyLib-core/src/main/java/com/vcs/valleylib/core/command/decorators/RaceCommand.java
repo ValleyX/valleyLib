@@ -40,8 +40,9 @@ public class RaceCommand extends BaseCommand {
 
     @Override
     protected void onEnd(boolean interrupted) {
+        // Commands that won the race ended naturally; the rest are interrupted.
         for (Command c : commands) {
-            c.end(true);
+            c.end(interrupted || !c.isFinished());
         }
     }
 
