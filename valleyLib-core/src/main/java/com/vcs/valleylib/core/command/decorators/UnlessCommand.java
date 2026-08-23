@@ -30,4 +30,10 @@ public class UnlessCommand extends CommandWrapper {
     protected boolean onIsFinished() {
         return skip || inner.isFinished();
     }
+
+    @Override
+    protected void onEnd(boolean interrupted) {
+        // When skipped, the inner command never initialized — don't end() it.
+        if (!skip) super.onEnd(interrupted);
+    }
 }
