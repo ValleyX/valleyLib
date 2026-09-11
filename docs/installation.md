@@ -49,7 +49,8 @@ Replace `<version>` with a release tag from the table below.
 | 1.0.4   | No                |
 | 1.0.5   | No                |
 | 1.0.6   | Yes               |
-| 1.0.7   | **Yes (recommended)** |
+| 1.0.7   | Yes               |
+| 1.0.8   | **Yes (recommended)** |
 
 !!! warning
     Versions marked "No" fail to resolve or contain packaging defects. Always use the latest recommended release.
@@ -78,6 +79,6 @@ cd valleyLib
 ./gradlew :valleyLib-core:publishToMavenLocal :valleyLib-ftc:publishToMavenLocal
 ```
 
-Then depend on `com.vcs.valleylib:core:1.0.7` / `com.vcs.valleylib:ftc:1.0.7` with `mavenLocal()` in your repositories.
+Then depend on `com.vcs.valleylib:core:1.0.8` / `com.vcs.valleylib:ftc:1.0.8` with `mavenLocal()` in your repositories.
 
 Next up: the [Quickstart](quickstart.md).

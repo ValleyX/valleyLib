@@ -2,7 +2,7 @@
 
 All notable changes to ValleyLib. Versions correspond to Git tags consumed through JitPack.
 
-## Unreleased
+## 1.0.8 — 2026-09-11
 
 ### Added
 - **`StateMachine`** command (`core.fsm`): enum-keyed finite state machine with per-state commands, `onEnter`/`onExit` hooks, condition / finish / timeout / global transitions, terminal states, transition listeners, `forceState`, and an allocation-free hot path. See [Finite State Machines](core/state-machines.md).

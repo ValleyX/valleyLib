@@ -48,7 +48,7 @@ dependencies {
 }
 ```
 
-*(Replace `Tag` with a release tag like `1.0.7`)*
+*(Replace `Tag` with a release tag like `1.0.8`)*
 
 | Version | Usable?           |
 | ------- | ----------------- |
@@ -59,7 +59,8 @@ dependencies {
 | 1.0.4   | No                |
 | 1.0.5   | No                |
 | 1.0.6   | Yes               |
-| 1.0.7   | Yes (recommended) |
+| 1.0.7   | Yes               |
+| 1.0.8   | Yes (recommended) |
 
 ## Key Features
 
