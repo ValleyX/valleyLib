@@ -2,27 +2,28 @@ package com.vcs.valleylib.core.command.decorators;
 
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.command.CommandWrapper;
+import com.vcs.valleylib.core.time.RobotClock;
 
 public class TimeoutCommand extends CommandWrapper {
 
-    private final long timeoutMillis;
-    private long startTime;
+    private final long timeoutNanos;
+    private long startNanos;
 
     public TimeoutCommand(Command inner, long timeoutMillis) {
         super(inner);
-        this.timeoutMillis = timeoutMillis;
+        this.timeoutNanos = timeoutMillis * 1_000_000L;
     }
 
     @Override
     protected void onInitialize() {
-        startTime = System.currentTimeMillis();
+        startNanos = RobotClock.nanos();
         super.onInitialize();
     }
 
     @Override
     protected boolean onIsFinished() {
         return inner.isFinished() ||
-                System.currentTimeMillis() - startTime >= timeoutMillis;
+                RobotClock.nanos() - startNanos >= timeoutNanos;
     }
 
     @Override

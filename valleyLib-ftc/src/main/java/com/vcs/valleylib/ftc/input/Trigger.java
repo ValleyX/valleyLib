@@ -2,6 +2,7 @@ package com.vcs.valleylib.ftc.input;
 
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.scheduler.CommandScheduler;
+import com.vcs.valleylib.core.time.RobotClock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,13 +184,13 @@ public class Trigger implements BooleanSupplier {
             this.source = source;
             this.debounceNanos = (long) (seconds * 1_000_000_000L);
             this.lastSample = source.getAsBoolean();
-            this.changeTimestampNanos = System.nanoTime();
+            this.changeTimestampNanos = RobotClock.nanos();
         }
 
         @Override
         public boolean getAsBoolean() {
             boolean sample = source.getAsBoolean();
-            long now = System.nanoTime();
+            long now = RobotClock.nanos();
 
             if (sample != lastSample) {
                 lastSample = sample;

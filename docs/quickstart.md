@@ -146,3 +146,4 @@ Every loop, `CommandOpMode` does four things in order:
 - Compose behavior with [decorators](core/decorators.md) and [command groups](core/command-groups.md).
 - Give your drivetrain a [default command](core/subsystems.md) for joystick driving.
 - Build full autonomous routines with the [AutoDsl](core/auto-dsl.md) or [Pedro Pathing](pedro/overview.md).
+- Model scoring cycles, looping autos, and mechanism modes as a [finite state machine](core/state-machines.md).

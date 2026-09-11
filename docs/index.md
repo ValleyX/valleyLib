@@ -52,6 +52,8 @@ This separation means your command logic can be **unit-tested and simulated on y
 
 - **Autonomous DSLs** — declarative builders (`AutoDsl`, `PedroAutoDsl`) with markers, waits, conditionals, and parallel actions. → [AutoDsl](core/auto-dsl.md)
 
+- **Finite state machines** — a first-class `StateMachine` command: enum states, per-state commands, enter/exit hooks, condition/finish/timeout/global transitions, and terminal states — replaces `switch(pathState)` loops entirely. → [State Machines](core/state-machines.md)
+
 - **Desktop simulation** — `simulationPeriodic()` hooks and a simulation mode on the scheduler for hardware-free iteration. → [Simulation](guides/simulation-testing.md)
 
 </div>
@@ -98,4 +100,5 @@ That's the whole OpMode. No manual `follower.update()`, no telemetry bookkeeping
 1. [Installation](installation.md) — add ValleyLib to your TeamCode project via JitPack.
 2. [Quickstart](quickstart.md) — build your first subsystem, robot container, and OpMode.
 3. [Commands](core/commands.md) — learn the core abstraction everything else builds on.
-4. [API Summary](reference/api-summary.md) — a one-page index of every public class in the library.
+4. [Finite State Machines](core/state-machines.md) — how to express cycles, loops, and overrides as a `StateMachine` command.
+5. [API Summary](reference/api-summary.md) — a one-page index of every public class in the library.

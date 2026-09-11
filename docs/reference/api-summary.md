@@ -8,8 +8,9 @@ A one-page index of every public type in ValleyLib, grouped by package, with lin
 
 | Type | Kind | Summary | Docs |
 | ---- | ---- | ------- | ---- |
-| `Command` | interface | The core behavior unit: lifecycle methods + decorator defaults | [Commands](../core/commands.md) |
-| `Commands` | final class | Static factories: `none`, `runOnce`, `run`, `startEnd`, `waitSeconds`, `waitUntil`, `sequence`, `parallel`, `race`, `either`, `deadline` | [Command Groups](../core/command-groups.md) |
+| `Command` | interface | The core behavior unit: lifecycle methods, `getName`/`withName`, decorator defaults | [Commands](../core/commands.md) |
+| `Commands` | final class | Static factories: `none`, `runOnce`, `run`, `startEnd`, `runEnd` (each with optional `Subsystem...` requirements), `waitSeconds`, `waitUntil`, `sequence`, `parallel`, `race`, `either`, `deadline` | [Command Groups](../core/command-groups.md) |
+| `FunctionalCommand` | class | Command assembled from lifecycle lambdas + requirements; the primitive behind the factories | [Commands](../core/commands.md#functionalcommand) |
 | `InstantCommand` | class | Runs an action once, finishes immediately | [Commands](../core/commands.md#instantcommand) |
 | `WaitCommand` | class | Waits a fixed number of seconds | [Commands](../core/commands.md#waitcommand) |
 | `WaitUntilCommand` | class | Finishes when a condition becomes true | [Commands](../core/commands.md#waituntilcommand) |
@@ -32,6 +33,7 @@ A one-page index of every public type in ValleyLib, grouped by package, with lin
 | `BeforeStartingCommand` | Runs an action before initialization (`beforeStarting`) | [Decorators](../core/decorators.md) |
 | `FinallyCommand` | Runs an action when the command ends (`finallyDo`) | [Decorators](../core/decorators.md) |
 | `RepeatCommand` | Restarts the inner command whenever it finishes (`repeatedly`) | [Decorators](../core/decorators.md) |
+| `NamedCommand` | Gives a command a readable name for logging (`withName`) | [Commands](../core/commands.md#command-names) |
 
 ### `com.vcs.valleylib.core.scheduler`
 
@@ -44,7 +46,22 @@ A one-page index of every public type in ValleyLib, grouped by package, with lin
 
 | Type | Kind | Summary | Docs |
 | ---- | ---- | ------- | ---- |
-| `Subsystem` | abstract class | Hardware unit base: `periodic()`, `simulationPeriodic()`, default commands, and requirement-carrying factories (`runOnce`, `run`, `startEnd`, `runEnd`) | [Subsystems](../core/subsystems.md) |
+| `Subsystem` | abstract class | Hardware unit base: `periodic()`, `simulationPeriodic()`, default commands, `getName()`, and requirement-carrying factories (`runOnce`, `run`, `startEnd`, `runEnd`, `idle`) | [Subsystems](../core/subsystems.md) |
+
+### `com.vcs.valleylib.core.time`
+
+| Type | Kind | Summary | Docs |
+| ---- | ---- | ------- | ---- |
+| `Clock` | functional interface | `long nanos()` monotonic time source | [Simulation & Testing](../guides/simulation-testing.md#controlling-time) |
+| `RobotClock` | static holder | The library's time source: `nanos`/`seconds`/`millis`, `setClock`, `useSystemClock` | [Simulation & Testing](../guides/simulation-testing.md#controlling-time) |
+| `ManualClock` | class | A clock that moves only via `advance`/`set` — deterministic timing in tests | [Simulation & Testing](../guides/simulation-testing.md#controlling-time) |
+
+### `com.vcs.valleylib.core.fsm`
+
+| Type | Kind | Summary | Docs |
+| ---- | ---- | ------- | ---- |
+| `StateMachine<S extends Enum<S>>` | command | Enum-keyed finite state machine that runs as a command: per-state commands, `onEnter`/`onExit` hooks, condition/finish/timeout/global transitions, terminal states, transition listeners, `forceState`, allocation-free hot path | [State Machines](../core/state-machines.md) |
+| `StateMachine.TransitionListener<S>` | functional interface | `onTransition(from, to)` observer for telemetry/logging | [State Machines](../core/state-machines.md#observing-transitions) |
 
 ### `com.vcs.valleylib.core.auto`
 

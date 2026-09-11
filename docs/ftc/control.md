@@ -48,7 +48,7 @@ drive.stop();
 | `calculate(pv, sp)` | New measurement **and** new setpoint |
 | `calculate()` | Re-run with the last measurement |
 
-Timing is handled internally: the controller measures the real elapsed time between `calculate` calls (from `System.nanoTime()`) and uses it for the integral and derivative terms, so irregular loop times don't skew the math.
+Timing is handled internally: the controller measures the real elapsed time between `calculate` calls (via [`RobotClock`](../guides/simulation-testing.md#controlling-time), so it's deterministic in tests) and uses it for the integral and derivative terms, so irregular loop times don't skew the math.
 
 !!! warning "One controller per loop rate"
     Because the controller keeps its own clock, call `calculate` at a steady cadence (once per OpMode loop) and call `reset()` whenever you start using a controller again after a pause — otherwise the first derivative/integral step sees a huge dt.

@@ -7,7 +7,9 @@ ValleyLib is a modern, command-based robotics library for FTC, heavily inspired 
 
 ## Documentation
 
-**Full documentation site:** the `docs/` folder is an [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) site covering every feature. Build it locally with:
+**📖 Full documentation site: https://valleyx.github.io/valleyLib/** — published automatically from `master`.
+
+The `docs/` folder is an [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) site covering every feature. Build it locally with:
 
 ```bash
 pip install -r docs/requirements.txt
@@ -21,7 +23,7 @@ Quick links into the source docs:
 - [Home / feature overview](docs/index.md)
 - [Installation](docs/installation.md)
 - [Quickstart](docs/quickstart.md)
-- Command system: [Commands](docs/core/commands.md) · [Decorators](docs/core/decorators.md) · [Groups & Factories](docs/core/command-groups.md) · [Scheduler](docs/core/scheduler.md) · [Subsystems](docs/core/subsystems.md) · [AutoDsl](docs/core/auto-dsl.md)
+- Command system: [Commands](docs/core/commands.md) · [Decorators](docs/core/decorators.md) · [Groups & Factories](docs/core/command-groups.md) · [Scheduler](docs/core/scheduler.md) · [Subsystems](docs/core/subsystems.md) · [AutoDsl](docs/core/auto-dsl.md) · [State Machines](docs/core/state-machines.md)
 - FTC integration: [CommandOpMode](docs/ftc/command-opmode.md) · [Gamepads](docs/ftc/gamepads.md) · [Triggers](docs/ftc/triggers.md) · [Hardware](docs/ftc/hardware.md) · [PID & Feedforward](docs/ftc/control.md) · [Telemetry](docs/ftc/telemetry.md) · [RobotContainer](docs/ftc/robot-container.md)
 - Pedro Pathing: [Overview](docs/pedro/overview.md) · [PedroAutoDsl](docs/pedro/auto-dsl.md) · [Migration guide](docs/pedro/migration.md)
 - Guides: [Custom commands](docs/guides/custom-commands.md) · [Simulation & testing](docs/guides/simulation-testing.md) · [Samples](docs/guides/samples.md)
@@ -93,6 +95,20 @@ driver.a().whileTrue(intake.startEnd(intake::in, intake::stop));
 - FTCLib-style `Motor`, `MotorEx`, and `MotorGroup` wrappers with GoBILDA presets, a smart encoder (overflow-corrected velocity, acceleration estimation), and velocity/position control modes.
 - A full controller stack: `PIDFController`, `PIDController`, `PDController`, `PController`, and WPILib's `SimpleMotorFeedforward`.
 
+### Finite State Machines
+A first-class `StateMachine` command for anything with loops, branches, timeouts, or overrides — scoring cycles, looping autos, mechanism modes:
+```java
+StateMachine<Cycle> cycle = new StateMachine<>(Cycle.INTAKE)
+    .state(Cycle.INTAKE,   intake.runEnd(intake::in, intake::stop))
+    .state(Cycle.TRANSFER, transfer.handoffCommand())
+    .state(Cycle.SCORE,    outtake.scoreCommand())
+    .transition(Cycle.INTAKE, Cycle.TRANSFER, sensor::hasGamePiece)
+    .transitionOnFinish(Cycle.TRANSFER, Cycle.SCORE)
+    .transitionAfter(Cycle.SCORE, 0.4, Cycle.INTAKE)
+    .transitionFromAny(Cycle.INTAKE, driver.back());
+```
+Enum states, per-state commands, `onEnter`/`onExit` hooks, condition/finish/timeout/global transitions, terminal states, transition listeners, and an allocation-free hot path. It's a `Command`, so it schedules, binds, decorates, and nests like everything else. See the [State Machines guide](docs/core/state-machines.md).
+
 ### Autonomous DSLs
 - **`AutoDsl`**: platform-agnostic builder with alias methods (`add`, `doInstant`, `waitFor`, `ifElse`) for easy migration from other command DSLs.
 - **`PedroAutoDsl`**: path-first builder for Pedro Pathing autos.
@@ -103,7 +119,7 @@ driver.a().whileTrue(intake.startEnd(intake::in, intake::stop));
 - **`FtcCommandLogger`**: optional listener that logs command lifecycle events (scheduled, finished, canceled) — enable with one override in `CommandOpMode`.
 
 ### Desktop Simulation & Testing
-`valleyLib-core` has no Android dependencies: unit-test your commands and autos on your laptop, with `simulationPeriodic()` hooks and a scheduler simulation mode for physics models.
+`valleyLib-core` has no Android dependencies: unit-test your commands, autos, and state machines on your laptop, with `simulationPeriodic()` hooks, a scheduler simulation mode for physics models, and a `ManualClock` that makes every timeout, wait, dwell transition, and debounce deterministic.
 
 ## Sample Starters
 

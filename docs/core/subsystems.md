@@ -55,7 +55,7 @@ Called only when the scheduler's simulation mode is enabled (or via `runSimulati
 A **default command** runs whenever no other command requires the subsystem. The classic example is joystick driving:
 
 ```java
-drive.setDefaultCommand(Commands.run(() ->
+drive.setDefaultCommand(drive.run(() ->
         drive.tankDrive(driver.leftY(), driver.rightY())));
 ```
 
@@ -71,7 +71,7 @@ drive.getDefaultCommand();          // returns the command, or null
 ```
 
 !!! tip
-    Default commands typically never finish on their own (`Commands.run(...)` is ideal). A default command that finishes will simply be rescheduled next cycle.
+    Default commands typically never finish on their own (`subsystem.run(...)` is ideal). A default command that finishes will simply be rescheduled next cycle.
 
 ## Requirements vs. periodic
 
@@ -94,6 +94,9 @@ Every subsystem carries WPILib-style factory methods that build commands **requi
 | `subsystem.run(action)` | Runs the action every cycle, never finishes on its own — ideal for default commands |
 | `subsystem.startEnd(onStart, onEnd)` | `onStart` when scheduled, `onEnd` when it ends (finished *or* interrupted) — ideal for `whileTrue` |
 | `subsystem.runEnd(action, onEnd)` | Runs every cycle, plus an end action |
+| `subsystem.idle()` | Holds the subsystem and does nothing — an explicit "stay still" in parallel groups, or a placeholder default |
+
+Factory commands are named after the subsystem (`Intake.startEnd`, `Drive.run`) so the [command logger](../ftc/telemetry.md#command-lifecycle-logging) output reads well. Override `getName()` on the subsystem to change the prefix.
 
 ```java
 // Default drive command that owns the drivetrain:

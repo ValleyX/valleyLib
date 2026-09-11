@@ -2,6 +2,7 @@ package com.vcs.valleylib.ftc.hardware;
 
 import androidx.annotation.NonNull;
 
+import com.vcs.valleylib.core.time.RobotClock;
 import com.vcs.valleylib.ftc.control.PController;
 import com.vcs.valleylib.ftc.control.PIDController;
 import com.vcs.valleylib.ftc.control.wpilibcontroller.SimpleMotorFeedforward;
@@ -83,7 +84,7 @@ public class Motor implements HardwareDevice {
             lastPosition = 0;
             veloEstimate = 0;
             direction = Direction.FORWARD;
-            lastTimeStamp = (double) System.nanoTime() / 1E9;
+            lastTimeStamp = RobotClock.seconds();
             accelTimeStamp = lastTimeStamp;
         }
 
@@ -93,7 +94,7 @@ public class Motor implements HardwareDevice {
         public int getPosition() {
             int currentPosition = m_position.get();
             if (currentPosition != lastPosition) {
-                double currentTime = (double) System.nanoTime() / 1E9;
+                double currentTime = RobotClock.seconds();
                 double dt = currentTime - lastTimeStamp;
                 veloEstimate = (currentPosition - lastPosition) / dt;
                 lastPosition = currentPosition;
@@ -155,7 +156,7 @@ public class Motor implements HardwareDevice {
         public double getRawVelocity() {
             double velo = getVelocity();
             if (velo != lastVelo) {
-                double currentTime = (double) System.nanoTime() / 1E9;
+                double currentTime = RobotClock.seconds();
                 double dt = currentTime - accelTimeStamp;
                 if (dt > 1E-6) {
                     accel = (velo - lastVelo) / dt;

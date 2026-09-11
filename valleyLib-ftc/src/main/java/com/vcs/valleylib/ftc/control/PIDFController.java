@@ -1,5 +1,7 @@
 package com.vcs.valleylib.ftc.control;
 
+import com.vcs.valleylib.core.time.RobotClock;
+
 /**
  * This is a PID controller (https://en.wikipedia.org/wiki/PID_controller)
  * for your robot. Internally, it performs all the calculations for you.
@@ -188,7 +190,7 @@ public class PIDFController {
     public double calculate(double pv) {
         prevErrorVal = errorVal_p;
 
-        double currentTimeStamp = (double) System.nanoTime() / 1E9;
+        double currentTimeStamp = RobotClock.seconds();
         if (lastTimeStamp == 0) lastTimeStamp = currentTimeStamp;
         period = currentTimeStamp - lastTimeStamp;
         lastTimeStamp = currentTimeStamp;

@@ -84,16 +84,17 @@ Three convenience bases save boilerplate for common shapes:
 
     ```java
     public class TimedLogCommand extends CommandWrapper {
-        private long start;
+        private double start;
         public TimedLogCommand(Command inner) { super(inner); }
 
         @Override protected void onInitialize() {
-            start = System.currentTimeMillis();
+            start = RobotClock.seconds();
             super.onInitialize();
         }
         @Override protected void onEnd(boolean interrupted) {
             super.onEnd(interrupted);
-            System.out.println("took " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println(getName() + " took "
+                    + (RobotClock.seconds() - start) + " s");
         }
     }
     ```

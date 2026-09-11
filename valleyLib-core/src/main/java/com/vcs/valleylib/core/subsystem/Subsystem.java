@@ -1,9 +1,8 @@
 package com.vcs.valleylib.core.subsystem;
 
 import com.vcs.valleylib.core.command.Command;
+import com.vcs.valleylib.core.command.FunctionalCommand;
 import com.vcs.valleylib.core.scheduler.CommandScheduler;
-
-import java.util.Set;
 
 /**
  * Base class for all robot subsystems.
@@ -15,8 +14,11 @@ import java.util.Set;
  *  - expose high-level actions (not raw motor power everywhere)
  *  - run periodic background logic
  *  - own a default command for idle behavior
+ *  - build requirement-carrying commands via the factory methods below
  */
 public abstract class Subsystem {
+
+    private static final Runnable NO_OP = () -> {};
 
     private Command defaultCommand;
 
@@ -56,6 +58,14 @@ public abstract class Subsystem {
         return defaultCommand;
     }
 
+    /**
+     * A short name for this subsystem, used in command names and
+     * telemetry. Defaults to the class's simple name.
+     */
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
     // ------------------------------------------------------------------
     // Command factories (WPILib-style)
     //
@@ -68,32 +78,8 @@ public abstract class Subsystem {
      * requiring this subsystem.
      */
     public Command runOnce(Runnable action) {
-        return new Command() {
-            private boolean hasRun;
-
-            @Override
-            public void initialize() {
-                hasRun = false;
-            }
-
-            @Override
-            public void execute() {
-                if (!hasRun) {
-                    action.run();
-                    hasRun = true;
-                }
-            }
-
-            @Override
-            public boolean isFinished() {
-                return hasRun;
-            }
-
-            @Override
-            public Set<Subsystem> getRequirements() {
-                return Set.of(Subsystem.this);
-            }
-        };
+        return new FunctionalCommand(NO_OP, action, interrupted -> {}, () -> true, this)
+                .withName(getName() + ".runOnce");
     }
 
     /**
@@ -101,17 +87,8 @@ public abstract class Subsystem {
      * on its own, requiring this subsystem. Ideal for default commands.
      */
     public Command run(Runnable action) {
-        return new Command() {
-            @Override
-            public void execute() {
-                action.run();
-            }
-
-            @Override
-            public Set<Subsystem> getRequirements() {
-                return Set.of(Subsystem.this);
-            }
-        };
+        return new FunctionalCommand(NO_OP, action, interrupted -> {}, () -> false, this)
+                .withName(getName() + ".run");
     }
 
     /**
@@ -120,25 +97,8 @@ public abstract class Subsystem {
      * subsystem. Ideal for whileTrue bindings.
      */
     public Command startEnd(Runnable onStart, Runnable onEnd) {
-        return new Command() {
-            @Override
-            public void initialize() {
-                onStart.run();
-            }
-
-            @Override
-            public void execute() {}
-
-            @Override
-            public void end(boolean interrupted) {
-                onEnd.run();
-            }
-
-            @Override
-            public Set<Subsystem> getRequirements() {
-                return Set.of(Subsystem.this);
-            }
-        };
+        return new FunctionalCommand(onStart, NO_OP, interrupted -> onEnd.run(), () -> false, this)
+                .withName(getName() + ".startEnd");
     }
 
     /**
@@ -147,21 +107,17 @@ public abstract class Subsystem {
      * subsystem.
      */
     public Command runEnd(Runnable action, Runnable onEnd) {
-        return new Command() {
-            @Override
-            public void execute() {
-                action.run();
-            }
+        return new FunctionalCommand(NO_OP, action, interrupted -> onEnd.run(), () -> false, this)
+                .withName(getName() + ".runEnd");
+    }
 
-            @Override
-            public void end(boolean interrupted) {
-                onEnd.run();
-            }
-
-            @Override
-            public Set<Subsystem> getRequirements() {
-                return Set.of(Subsystem.this);
-            }
-        };
+    /**
+     * Returns a command that holds this subsystem and does nothing —
+     * useful to explicitly idle a mechanism inside a parallel group or as
+     * a placeholder default command.
+     */
+    public Command idle() {
+        return new FunctionalCommand(NO_OP, NO_OP, interrupted -> {}, () -> false, this)
+                .withName(getName() + ".idle");
     }
 }

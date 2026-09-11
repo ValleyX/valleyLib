@@ -70,15 +70,16 @@ Command scorePosition = new ConditionalCommand(
 
 `com.vcs.valleylib.core.command.Commands` provides static factories so you can build common commands without `new` noise. It is the idiomatic entry point for inline commands.
 
-!!! tip "Need requirements? Use the subsystem factories"
-    `Commands`-built commands carry **no** subsystem requirements. When the command actuates a mechanism, prefer the equivalent [subsystem factories](subsystems.md#command-factories) — `intake.runOnce(...)`, `drive.run(...)`, `intake.startEnd(...)`, `lift.runEnd(...)` — which require their subsystem and participate in scheduler conflict resolution.
+!!! tip "Requirements"
+    The plain forms carry **no** subsystem requirements — use them for glue (waits, markers, grouping). For anything that actuates a mechanism, either use the [subsystem factories](subsystems.md#command-factories) (`intake.startEnd(...)`) for a single subsystem, or pass requirements explicitly for several: `Commands.run(() -> ..., intake, transfer)`. Both participate in scheduler conflict resolution.
 
 | Factory | Returns |
 | ------- | ------- |
 | `Commands.none()` | A command that does nothing and finishes instantly |
-| `Commands.runOnce(action)` | `InstantCommand` — runs the action once, then finishes |
-| `Commands.run(action)` | Runs the action every cycle, never finishes on its own (great for default commands) |
-| `Commands.startEnd(onStart, onEnd)` | Runs `onStart` when scheduled, `onEnd` when it ends — perfect for `whileTrue` bindings |
+| `Commands.runOnce(action[, requirements...])` | Runs the action once, then finishes |
+| `Commands.run(action[, requirements...])` | Runs the action every cycle, never finishes on its own (great for default commands) |
+| `Commands.startEnd(onStart, onEnd[, requirements...])` | Runs `onStart` when scheduled, `onEnd` when it ends — perfect for `whileTrue` bindings |
+| `Commands.runEnd(action, onEnd[, requirements...])` | Runs `action` every cycle and `onEnd` when it ends |
 | `Commands.waitSeconds(seconds)` | `WaitCommand` |
 | `Commands.waitUntil(condition)` | `WaitUntilCommand` |
 | `Commands.sequence(cmds...)` | `SequentialCommandGroup` |

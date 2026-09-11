@@ -1,16 +1,17 @@
 package com.vcs.valleylib.ftc.command;
 
-import com.pedropathing.util.Timer;
 import com.vcs.valleylib.core.command.Command;
+import com.vcs.valleylib.core.time.RobotClock;
 
 /**
  * Command that runs for a fixed duration.
- * Preferred over raw Timer usage in autos.
+ * Preferred over raw timer usage in autos. Timing comes from
+ * {@link RobotClock}, so it is deterministic under a manual clock in tests.
  */
 public abstract class TimedCommand implements Command {
 
     private final double durationSeconds;
-    private final Timer timer = new Timer();
+    private double startSeconds;
 
     protected TimedCommand(double durationSeconds) {
         this.durationSeconds = durationSeconds;
@@ -18,23 +19,30 @@ public abstract class TimedCommand implements Command {
 
     @Override
     public void initialize() {
-        timer.resetTimer();
+        startSeconds = RobotClock.seconds();
         onStart();
     }
 
     @Override
     public void execute() {
-        onLoop(timer.getElapsedTimeSeconds());
+        onLoop(elapsedSeconds());
     }
 
     @Override
     public boolean isFinished() {
-        return timer.getElapsedTimeSeconds() >= durationSeconds;
+        return elapsedSeconds() >= durationSeconds;
     }
 
     @Override
     public void end(boolean interrupted) {
         onEnd(interrupted);
+    }
+
+    /**
+     * @return seconds since this command was initialized
+     */
+    protected double elapsedSeconds() {
+        return RobotClock.seconds() - startSeconds;
     }
 
     protected abstract void onStart();
