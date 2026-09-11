@@ -2,6 +2,8 @@ package com.vcs.valleylib.ftc.input;
 
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.scheduler.CommandScheduler;
+import com.vcs.valleylib.core.time.ManualClock;
+import com.vcs.valleylib.core.time.RobotClock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -98,6 +100,28 @@ class TriggerTest {
         state.set(true);
         assertEquals(true, trigger.getAsBoolean());
         assertEquals(false, trigger.negate().getAsBoolean());
+    }
+
+    @Test
+    void debounceRequiresConditionToHoldForDuration() {
+        ManualClock clock = new ManualClock();
+        RobotClock.setClock(clock);
+        try {
+            AtomicBoolean state = new AtomicBoolean(false);
+            Trigger debounced = new Trigger(state::get).debounce(0.1);
+
+            state.set(true);
+            assertEquals(false, debounced.getAsBoolean());   // just changed
+            clock.advance(0.05);
+            assertEquals(false, debounced.getAsBoolean());   // not long enough
+            clock.advance(0.05);
+            assertEquals(true, debounced.getAsBoolean());    // held 100 ms
+
+            state.set(false);
+            assertEquals(false, debounced.getAsBoolean());   // drops immediately
+        } finally {
+            RobotClock.useSystemClock();
+        }
     }
 
     private static class CountingCommand implements Command {

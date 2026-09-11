@@ -37,4 +37,13 @@ public abstract class CommandWrapper extends BaseCommand {
     public Set<Subsystem> getRequirements() {
         return new HashSet<>(inner.getRequirements());
     }
+
+    /**
+     * Decorators report the wrapped command's name so that, e.g.,
+     * {@code intake.runIn().withTimeout(2)} still logs as the intake command.
+     */
+    @Override
+    public String getName() {
+        return inner.getName();
+    }
 }

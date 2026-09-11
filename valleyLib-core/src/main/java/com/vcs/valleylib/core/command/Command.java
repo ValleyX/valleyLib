@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.vcs.valleylib.core.command.decorators.BeforeStartingCommand;
 import com.vcs.valleylib.core.command.decorators.DeadlineCommand;
 import com.vcs.valleylib.core.command.decorators.FinallyCommand;
+import com.vcs.valleylib.core.command.decorators.NamedCommand;
 import com.vcs.valleylib.core.command.decorators.OnlyWhileCommand;
 import com.vcs.valleylib.core.command.decorators.ParallelCommandGroup;
 import com.vcs.valleylib.core.command.decorators.RaceCommand;
@@ -71,6 +72,24 @@ public interface Command {
      */
     default Set<Subsystem> getRequirements() {
         return Set.of();
+    }
+
+    /**
+     * A human-readable name for logging and telemetry.
+     * <p>
+     * Defaults to the class's simple name; anonymous classes and lambdas
+     * fall back to "Command". Override, or use {@link #withName(String)}.
+     */
+    default String getName() {
+        String simple = getClass().getSimpleName();
+        return simple.isEmpty() ? "Command" : simple;
+    }
+
+    /**
+     * Returns this command wrapped with a human-readable name.
+     */
+    default Command withName(String name) {
+        return new NamedCommand(this, name);
     }
 
     default Command withTimeout(double seconds) {
