@@ -71,7 +71,7 @@ public static Command taxiAndCycle(PedroSubsystem drive,
         .follow(taxiPath, 0.8)
         .parallel(
             PedroCommands.follow(drive, cyclePath, 0.9),
-            Commands.startEnd(intake::intakeIn, intake::stop)
+            intake.startEnd(intake::intakeIn, intake::stop)
         )
         .waitUntilDriveIdle()
         .action(intake::stop));

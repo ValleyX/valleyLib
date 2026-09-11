@@ -61,7 +61,7 @@ Command close = new InstantCommand(claw::close);
 
 ### `WaitCommand`
 
-Does nothing for a fixed duration (seconds). The backbone of timed autonomous sequences.
+Does nothing for a fixed duration (seconds). The backbone of timed autonomous sequences. Like every timed behavior in the library it reads [`RobotClock`](../guides/simulation-testing.md#controlling-time), so it is deterministic under a manual clock in tests.
 
 ```java
 Command pause = new WaitCommand(0.5);
@@ -90,6 +90,30 @@ public class SpinUpCommand extends TimedCommand {
     @Override protected void onEnd(boolean interrupted) { shooter.hold(); }
 }
 ```
+
+### `FunctionalCommand`
+
+A command assembled from lambdas for each lifecycle phase, with any number of requirements. It is the primitive behind the `Commands` and subsystem factories, and the right tool when a command needs a little logic in several phases and touches more than one subsystem — but is still too small for its own class:
+
+```java
+Command handoff = new FunctionalCommand(
+        () -> { intake.slow(); transfer.open(); },           // initialize
+        () -> {},                                            // execute
+        interrupted -> { intake.stop(); transfer.close(); }, // end
+        transfer::hasGamePiece,                              // isFinished
+        intake, transfer)                                    // requirements
+    .withName("Handoff");
+```
+
+## Command names
+
+Every command has a `getName()` used by the [command logger](../ftc/telemetry.md#command-lifecycle-logging) and useful in your own telemetry. Defaults are sensible — a class's simple name, `Wait(0.5s)`, `Intake.startEnd`, `StateMachine[SCORE]` — and anonymous classes fall back to `"Command"`. Name anything important explicitly:
+
+```java
+Command score = lift.toHighCommand().andThen(claw::open).withName("Score");
+```
+
+Decorators report the wrapped command's name, so `score.withTimeout(3)` still logs as `Score`. `FunctionalCommand.withName(...)` sets the name in place (no wrapper); on any other command it returns a lightweight `NamedCommand` wrapper.
 
 ## `BaseCommand`: a managed template
 

@@ -117,6 +117,10 @@ public class MigratedAuto extends CommandOpMode {
 }
 ```
 
+## Non-linear autos: keep the state machine, lose the `switch`
+
+If your `switch` had loops or branches — "cycle until 25 seconds, then park" — a linear DSL isn't the right target. Migrate it to a [`StateMachine`](../core/state-machines.md) command instead: each `case` becomes a `state(...)`, each `!follower.isBusy()` check becomes `transitionOnFinish(...)`, and each timer becomes `transitionAfter(...)`. The State Machines page has a side-by-side migration of exactly this shape.
+
 ## Why migrate?
 
 1. **Parallelism** — run an arm movement *while* driving with `.parallel(...)`. No more "if the path is 50% done" state contortions.

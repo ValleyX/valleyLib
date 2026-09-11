@@ -9,8 +9,9 @@ Because `valleyLib-core` has **zero** Android or FTC SDK dependencies, your comm
 | `Command`, groups, decorators | ✅ | |
 | `CommandScheduler`, listeners | ✅ | |
 | `Subsystem` (+ `simulationPeriodic`) | ✅ | |
-| `AutoDsl` | ✅ | |
-| `CommandXboxLike` (supplier-based input) | ✅ | |
+| `AutoDsl`, `StateMachine` | ✅ | |
+| `RobotClock` / `ManualClock` (controllable time) | ✅ | |
+| `CommandXboxLike` (supplier-based input), `Trigger` | ✅ | |
 | `Motor`, `CommandOpMode`, Pedro, telemetry | | ✅ (needs FTC SDK) |
 
 The trick is keeping your *logic* in core-only terms and injecting hardware behind interfaces or supplier functions.
@@ -47,10 +48,51 @@ class AutoRoutineTest {
 }
 ```
 
-Each `scheduler.run()` call is one loop tick — deterministic and fast. The library's own test suite (`CommandSchedulerTest`, `CommandGroupTest`, `CommandsFactoryTest`, `AutoDslTest`, `TriggerTest`) uses exactly this pattern; read them for more examples.
+Each `scheduler.run()` call is one loop tick — deterministic and fast. The library's own test suite (`CommandSchedulerTest`, `CommandGroupTest`, `DecoratorSemanticsTest`, `StateMachineTest`, `ClockTest`, `TriggerTest`, ...) uses exactly this pattern; read them for more examples.
 
-!!! tip "Time-based commands in tests"
-    `WaitCommand` and `withTimeout` use wall-clock time. In tests, either sleep past the duration, keep durations tiny, or gate on conditions (`waitUntil`) you control instead.
+## Controlling time
+
+Every time-based behavior in the library — `WaitCommand`, `withTimeout`, `StateMachine.transitionAfter`/`getTimeInState`, `Trigger.debounce`, `TimedCommand`, the `PIDFController` period, and `Motor.Encoder` velocity estimation — reads the clock through `RobotClock` (in `com.vcs.valleylib.core.time`) rather than `System.nanoTime()`. On the robot that is the system clock. In tests, install a `ManualClock` and move time yourself:
+
+```java
+class TimingTest {
+    private final ManualClock clock = new ManualClock();
+
+    @BeforeEach void setUp()    { RobotClock.setClock(clock); }
+    @AfterEach  void tearDown() { RobotClock.useSystemClock(); }
+
+    @Test
+    void shooterSpinsUpForHalfASecond() {
+        Command spinUp = shooter.runEnd(shooter::spin, shooter::hold).withTimeout(0.5);
+        spinUp.initialize();
+
+        clock.advance(0.49);
+        spinUp.execute();
+        assertFalse(spinUp.isFinished());
+
+        clock.advance(0.01);
+        spinUp.execute();
+        assertTrue(spinUp.isFinished());   // exactly on the 500 ms boundary
+    }
+}
+```
+
+| `RobotClock` | Purpose |
+| ------------ | ------- |
+| `nanos()` / `seconds()` / `millis()` | Read the installed clock |
+| `setClock(Clock)` | Install any `Clock` (a `long nanos()` functional interface) |
+| `useSystemClock()` | Restore the default |
+| `isSystemClock()` | Whether time is real or simulated |
+
+| `ManualClock` | Purpose |
+| ------------- | ------- |
+| `advance(seconds)` / `advanceNanos(n)` | Move forward (never backwards) |
+| `set(seconds)` | Jump to an absolute time |
+
+!!! tip "Simulation loops"
+    In a desktop simulation, advance the manual clock by your loop period (e.g. `clock.advance(0.02)`) before each `scheduler.run()` — timeouts, dwell transitions, and debounces then behave exactly as they will at 50 Hz on the robot, but you can run thousands of cycles per second.
+
+No test should ever need `Thread.sleep` for library timing. Always restore the system clock in `@AfterEach`; `RobotClock` is process-wide.
 
 ## Simulation hooks
 

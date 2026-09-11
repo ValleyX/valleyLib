@@ -28,12 +28,12 @@ Each binding method attaches a command and returns the same trigger (so bindings
 
 ```java
 driver.a().onTrue(claw.closeCommand());
-driver.rightBumper().whileTrue(Commands.startEnd(intake::in, intake::stop));
+driver.rightBumper().whileTrue(intake.startEnd(intake::in, intake::stop));
 driver.y().toggleOnTrue(flywheel.spinCommand());
 ```
 
 !!! tip "`whileTrue` + `startEnd` is the hold-to-run idiom"
-    `Commands.startEnd(start, stop)` never finishes on its own, so `whileTrue` runs `start` on press and `stop` fires via `end(true)` on release. Exactly what you want for intakes and rollers.
+    `startEnd(start, stop)` never finishes on its own, so `whileTrue` runs `start` on press and `stop` fires via `end(true)` on release. Exactly what you want for intakes and rollers — and the subsystem-factory form (`intake.startEnd(...)`) carries the requirement, so it cleanly preempts and yields to other intake commands.
 
 !!! note "Toggle uses command identity"
     `toggleOnTrue` checks `scheduler.isScheduled(command)` — reuse the **same command instance**, don't build a new one per binding.
@@ -93,7 +93,7 @@ Since a trigger is just a polled condition, you can bind automation to robot sta
 // Auto-stop intake when a game piece is captured
 new Trigger(sensor::hasGamePiece)
         .debounce(0.1)
-        .onTrue(Commands.runOnce(intake::stop));
+        .onTrue(intake.runOnce(intake::stop));
 
 // Rumble-free endgame reminder on the dashboard
 new Trigger(() -> matchTimer.remaining() < 30)

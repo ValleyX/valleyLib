@@ -75,7 +75,7 @@ AutoDsl.auto(a -> a
 ```java
 Command auto = AutoDsl.auto(a -> a
     .marker("start", tag -> telemetryBus.put("auto", tag))
-    .command(Commands.runOnce(intake::closeGate))
+    .command(intake.runOnce(intake::closeGate))
     .waitSeconds(0.15)
     .either(
         vision::seesPropLeft,
@@ -84,9 +84,9 @@ Command auto = AutoDsl.auto(a -> a
     )
     .deadline(
         drive.follow(backdropPath),
-        Commands.run(shooter::spin).withTimeout(1.2)
+        shooter.run(shooter::spin).withTimeout(1.2)
     )
-    .when(sensor::isReady, Commands.runOnce(outtake::drop))
+    .when(sensor::isReady, outtake.runOnce(outtake::drop))
 );
 ```
 
@@ -103,3 +103,6 @@ There is nothing AutoDsl does that `Commands.sequence(...)` + decorators cannot.
 - you want timeline markers for debugging.
 
 Stick with plain composition for short snippets and button bindings.
+
+!!! tip "Loops and branches? Use a state machine"
+    AutoDsl is deliberately linear. When a routine needs to *loop* (cycle until the clock runs out), *branch and rejoin*, *retry*, or honor *overrides from any step*, build it as a [`StateMachine`](state-machines.md) command instead — each state can still use `drive.follow(...)` and any other command.

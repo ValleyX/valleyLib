@@ -1,9 +1,16 @@
 site_name: ValleyLib
 site_description: A modern, command-based robotics library for FTC, inspired by WPILib and FTCLib.
-site_url: https://valleylib.readthedocs.io/
+site_url: https://valleyx.github.io/valleyLib/
 repo_url: https://github.com/ValleyX/valleyLib
 repo_name: ValleyX/valleyLib
 edit_uri: edit/master/docs/
+
+# Broken anchors are only logged at INFO by default; promote them so
+# `mkdocs build --strict` fails on a dead #fragment link.
+validation:
+  anchors: warn
+  absolute_links: warn
+  unrecognized_links: warn
 
 theme:
   name: material
@@ -66,6 +73,7 @@ nav:
       - The Command Scheduler: core/scheduler.md
       - Subsystems: core/subsystems.md
       - The AutoDsl Builder: core/auto-dsl.md
+      - Finite State Machines: core/state-machines.md
   - FTC Integration:
       - CommandOpMode: ftc/command-opmode.md
       - Gamepads & Input Shaping: ftc/gamepads.md
@@ -85,3 +93,4 @@ nav:
   - Reference:
       - API Summary: reference/api-summary.md
       - Design Notes: reference/design-notes.md
+      - Changelog: changelog.md

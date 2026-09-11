@@ -43,11 +43,11 @@ FtcTelemetryBus bus = new FtcTelemetryBus(
 
 | Event | Telemetry key | Value |
 | ----- | ------------- | ----- |
-| Command scheduled | `cmd/scheduled` | Command class name |
-| Command finished | `cmd/finished` | Command class name |
-| Command canceled | `cmd/canceled` | Command class name |
+| Command scheduled | `cmd/scheduled` | `command.getName()` |
+| Command finished | `cmd/finished` | `command.getName()` |
+| Command canceled | `cmd/canceled` | `command.getName()` |
 
-This gives you live visibility into what the scheduler is doing — invaluable when a binding "isn't working" or an auto stalls.
+Names are readable out of the box — `Intake.startEnd`, `Wait(0.5s)`, `StateMachine[SCORE]`, `FollowPathCommand` — and you can label important commands yourself with `.withName("Score")` (see [Command names](../core/commands.md#command-names)). This gives you live visibility into what the scheduler is doing — invaluable when a binding "isn't working" or an auto stalls.
 
 ### Enabling it
 
