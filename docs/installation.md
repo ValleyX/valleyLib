@@ -13,14 +13,15 @@ repositories {
 }
 ```
 
-If you plan to use the Pedro Pathing integration or the Panels telemetry dashboard, also add their repositories (ValleyLib's FTC module links against both):
+If you plan to use the Panels telemetry dashboard, also add its repository (ValleyLib's FTC module links against it):
 
 ```gradle
 repositories {
     maven { url = uri("https://mymaven.bylazar.com/releases") }
-    maven { url = uri("https://maven.pedropathing.com") }
 }
 ```
+
+Pedro Pathing 3 publishes to Maven Central, so it needs no extra repository.
 
 ## 2. Add the dependencies
 
@@ -50,7 +51,8 @@ Replace `<version>` with a release tag from the table below.
 | 1.0.5   | No                |
 | 1.0.6   | Yes               |
 | 1.0.7   | Yes               |
-| 1.0.8   | **Yes (recommended)** |
+| 1.0.8   | Yes — DECODE season (Pedro Pathing 2.x, FTC SDK 11) |
+| 2.0.0   | **Yes (recommended)** — first BIOBUZZ-season release (Pedro Pathing 3.x, FTC SDK 12) |
 
 !!! warning
     Versions marked "No" fail to resolve or contain packaging defects. Always use the latest recommended release.
@@ -61,13 +63,17 @@ Replace `<version>` with a release tag from the table below.
 | ----------- | ----- |
 | Java language level | 11 (built with JDK 17) |
 | Android `minSdk` | 24 |
-| FTC SDK | Current season SDK (`RobotCore`, `Hardware`, `RobotServer` are `compileOnly` — your TeamCode project provides them) |
-| Optional | Pedro Pathing (for the `pedro` package), Panels (for dashboard telemetry) |
+| FTC season | **BIOBUZZ** (2026-2027). ValleyLib 1.0.8 is the DECODE-season release. |
+| FTC SDK | **12.0.0** (`RobotCore`, `Hardware`, `RobotServer` are `compileOnly` — your TeamCode project provides them) |
+| Pedro Pathing | **3.x** (`com.pedropathing:core` + `com.pedropathing:revhub`, pulled in transitively). ValleyLib 1.0.x targets Pedro 2.x instead. |
+| Optional | Panels (for dashboard telemetry) |
 
 ## What each artifact contains
 
 - **`core`** — pure-Java command framework. No Android or FTC SDK dependencies, so you can also add it to plain JVM test modules.
-- **`ftc`** — Android library (AAR) with the FTC integrations. It pulls in Panels telemetry and the Pedro Pathing FTC artifacts as `api` dependencies.
+- **`ftc`** — Android library (AAR) with the FTC integrations. It pulls in Panels telemetry and the Pedro Pathing 3 artifacts (`core`, `revhub`) as `api` dependencies.
+
+Pedro's tuning dashboard (`com.pedropathing:tuning`) is **not** pulled in — it carries its own web server and other runtime dependencies. Add it to your TeamCode project directly if you want it.
 
 ## Building ValleyLib from source
 
@@ -79,6 +85,6 @@ cd valleyLib
 ./gradlew :valleyLib-core:publishToMavenLocal :valleyLib-ftc:publishToMavenLocal
 ```
 
-Then depend on `com.vcs.valleylib:core:1.0.8` / `com.vcs.valleylib:ftc:1.0.8` with `mavenLocal()` in your repositories.
+Then depend on `com.vcs.valleylib:core:2.0.0` / `com.vcs.valleylib:ftc:2.0.0` with `mavenLocal()` in your repositories.
 
 Next up: the [Quickstart](quickstart.md).

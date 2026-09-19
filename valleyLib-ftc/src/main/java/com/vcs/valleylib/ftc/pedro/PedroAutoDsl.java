@@ -1,6 +1,6 @@
 package com.vcs.valleylib.ftc.pedro;
 
-import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.Path;
 import com.vcs.valleylib.core.command.Command;
 import com.vcs.valleylib.core.command.Commands;
 
@@ -34,13 +34,13 @@ public final class PedroAutoDsl {
             this.drive = drive;
         }
 
-        public Builder follow(PathChain path) {
+        public Builder follow(Path path) {
             timeline.add(drive.follow(path));
             return this;
         }
 
-        public Builder follow(PathChain path, double maxPower) {
-            timeline.add(drive.follow(path, maxPower));
+        public Builder follow(Path path, double maxSpeed) {
+            timeline.add(drive.follow(path, maxSpeed));
             return this;
         }
 

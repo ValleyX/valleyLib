@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.vcs.valleylib'
-version = '1.0.8'
+version = '2.0.0'
 
 android {
     namespace 'org.vcs.valleylib.ftc'
@@ -48,8 +48,8 @@ dependencies {
     compileOnly libs.robotserver
 
     api libs.fullpanels
-    api libs.ftc
-    api libs.telemetry
+    api libs.pedro.core
+    api libs.pedro.revhub
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -4,6 +4,9 @@
 
 If you have written FRC code with WPILib — or FTC code with FTCLib — you will feel at home immediately. If you haven't, the [Quickstart](quickstart.md) walks you through everything from scratch.
 
+!!! tip "Season note"
+    **2.0.0 is the first ValleyLib release for [BIOBUZZ](https://www.firstinspires.org/programs/ftc/game-and-season), the 2026-2027 FTC season** — it targets FTC SDK 12 and Pedro Pathing 3. Teams still on DECODE should stay on 1.0.8; see the [Changelog](changelog.md) for what changed and the [Pedro migration guide](pedro/migration.md) for how to move.
+
 ## Why command-based?
 
 Traditional FTC OpModes tend to grow into giant `loop()` methods full of `if` statements and state machines. Command-based programming replaces that with two simple building blocks:

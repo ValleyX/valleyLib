@@ -1,6 +1,8 @@
 # ValleyLib
 
-ValleyLib is a modern, command-based robotics library for FTC, heavily inspired by WPILib and FTCLib. It provides a clean separation between core command logic and FTC-specific hardware integration, with first-class Pedro Pathing support.
+ValleyLib is a modern, command-based robotics library for FTC, heavily inspired by WPILib and FTCLib. It provides a clean separation between core command logic and FTC-specific hardware integration, with first-class Pedro Pathing 3 support.
+
+**2.0.0 is the first release for [BIOBUZZ](https://www.firstinspires.org/programs/ftc/game-and-season), the 2026-2027 FTC season** — FTC SDK 12 and Pedro Pathing 3. Teams still on DECODE should stay on 1.0.8.
 
 - `valleyLib-core`: Platform-agnostic scheduler, command, and subsystem abstractions (pure Java — desktop-testable).
 - `valleyLib-ftc`: FTC-specific integration: OpModes, input handling, motor wrappers, controllers, telemetry, and Pedro Pathing.
@@ -48,7 +50,7 @@ dependencies {
 }
 ```
 
-*(Replace `Tag` with a release tag like `1.0.8`)*
+*(Replace `Tag` with a release tag like `2.0.0`)*
 
 | Version | Usable?           |
 | ------- | ----------------- |
@@ -60,7 +62,8 @@ dependencies {
 | 1.0.5   | No                |
 | 1.0.6   | Yes               |
 | 1.0.7   | Yes               |
-| 1.0.8   | Yes (recommended) |
+| 1.0.8   | Yes — DECODE season (Pedro Pathing 2.x, FTC SDK 11) |
+| 2.0.0   | Yes (recommended) — first BIOBUZZ-season release (Pedro Pathing 3.x, FTC SDK 12) |
 
 ## Key Features
 
@@ -113,7 +116,7 @@ Enum states, per-state commands, `onEnter`/`onExit` hooks, condition/finish/time
 ### Autonomous DSLs
 - **`AutoDsl`**: platform-agnostic builder with alias methods (`add`, `doInstant`, `waitFor`, `ifElse`) for easy migration from other command DSLs.
 - **`PedroAutoDsl`**: path-first builder for Pedro Pathing autos.
-- **`FollowPathCommand`** / **`PedroCommands`** / **`PedroSubsystem`**: full command-based Pedro Pathing integration — no state machines, no manual `follower.update()`.
+- **`FollowPathCommand`** / **`PedroCommands`** / **`PedroSubsystem`**: full command-based Pedro Pathing 3 integration — no state machines, no manual `follower.update()`.
 
 ### Telemetry & Logging
 - **`FtcTelemetryBus`**: one `put(...)` mirrors data to the Driver Station and the Panels dashboard; supports `clear()` for discarding stale queued data.
