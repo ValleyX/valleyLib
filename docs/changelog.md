@@ -4,9 +4,12 @@ All notable changes to ValleyLib. Versions correspond to Git tags consumed throu
 
 ## 2.0.0 — 2026-09-19
 
+**The first ValleyLib release for [BIOBUZZ](https://www.firstinspires.org/programs/ftc/game-and-season), the 2026-2027 FIRST Tech Challenge season.** Start the season here: 1.0.8 and earlier target the previous season's Pedro Pathing and FTC SDK.
+
 Moves the `pedro` package to **Pedro Pathing 3**. Pedro 3 is a breaking rewrite of the pathing API, so this release is breaking too — see the [Pedro 2 → Pedro 3 table](pedro/migration.md#first-pedro-2-pedro-3) for the full mapping. ValleyLib 1.0.8 remains the release for teams staying on Pedro 2.x.
 
 ### Changed
+- **FTC SDK 11.1.0 → 12.0.0**, the BIOBUZZ-season SDK. It stays `compileOnly`, so your TeamCode project still supplies the SDK at build time — but ValleyLib now compiles against the same season's API you do.
 - **Dependencies**: `com.pedropathing:ftc:2.0.6` → `com.pedropathing:core:3.0.1` + `com.pedropathing:revhub:3.0.1` (Pedro 3 split the platform-agnostic follower from the REV-hub hardware layer). Both resolve from Maven Central, so the `maven.pedropathing.com` repository is no longer needed.
 - **`PathChain` → `Path`** throughout `PedroSubsystem`, `FollowPathCommand`, `PedroCommands`, and `PedroAutoDsl`.
 - **`maxPower` → `maxSpeed`**, and it means what it says. Pedro 3 removed `Follower.setMaxPower`; a cap is now `maxPathSpeed`, a fraction of the robot's maximum achievable *velocity*. `follow(path, maxSpeed)` attaches it to the path as a Pedro modifier, so Pedro reverts it when the path ends — an interrupted path can no longer leave the robot permanently slow. `setMaxPower(p)` is now `setMaxSpeed(p)`.

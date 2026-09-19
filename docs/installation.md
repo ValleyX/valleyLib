@@ -51,8 +51,8 @@ Replace `<version>` with a release tag from the table below.
 | 1.0.5   | No                |
 | 1.0.6   | Yes               |
 | 1.0.7   | Yes               |
-| 1.0.8   | Yes (Pedro Pathing 2.x) |
-| 2.0.0   | **Yes (recommended)** — Pedro Pathing 3.x |
+| 1.0.8   | Yes — DECODE season (Pedro Pathing 2.x, FTC SDK 11) |
+| 2.0.0   | **Yes (recommended)** — first BIOBUZZ-season release (Pedro Pathing 3.x, FTC SDK 12) |
 
 !!! warning
     Versions marked "No" fail to resolve or contain packaging defects. Always use the latest recommended release.
@@ -63,7 +63,8 @@ Replace `<version>` with a release tag from the table below.
 | ----------- | ----- |
 | Java language level | 11 (built with JDK 17) |
 | Android `minSdk` | 24 |
-| FTC SDK | Current season SDK (`RobotCore`, `Hardware`, `RobotServer` are `compileOnly` — your TeamCode project provides them) |
+| FTC season | **BIOBUZZ** (2026-2027). ValleyLib 1.0.8 is the DECODE-season release. |
+| FTC SDK | **12.0.0** (`RobotCore`, `Hardware`, `RobotServer` are `compileOnly` — your TeamCode project provides them) |
 | Pedro Pathing | **3.x** (`com.pedropathing:core` + `com.pedropathing:revhub`, pulled in transitively). ValleyLib 1.0.x targets Pedro 2.x instead. |
 | Optional | Panels (for dashboard telemetry) |
 
