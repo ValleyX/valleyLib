@@ -133,9 +133,10 @@ A one-page index of every public type in ValleyLib, grouped by package, with lin
 | Type | Kind | Summary | Docs |
 | ---- | ---- | ------- | ---- |
 | `PedroSubsystem` | abstract class | Owns the `Follower`; auto-updates it in `periodic()`; command factories | [Pedro](../pedro/overview.md) |
-| `FollowPathCommand` | class | Follows one `PathChain`; requires the drive subsystem | [Pedro](../pedro/overview.md#followpathcommand) |
+| `FollowPathCommand` | class | Follows one `Path`; requires the drive subsystem; stops the follower when interrupted | [Pedro](../pedro/overview.md#followpathcommand) |
 | `PedroCommands` | final class | Static factories: `follow`, `waitUntilIdle`, `followSequence` | [Pedro](../pedro/overview.md#pedrocommands) |
 | `PedroAutoDsl` / `.Builder` | builder | Path-first autonomous DSL | [PedroAutoDsl](../pedro/auto-dsl.md) |
+| `FollowerState` | final class | `isIdle(follower)` — the "is the drive done?" rule | [Pedro](../pedro/overview.md#when-is-the-drive-done) |
 
 ### `com.vcs.valleylib.ftc.samples`
 

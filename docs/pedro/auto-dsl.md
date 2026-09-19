@@ -24,9 +24,9 @@ Command auto = PedroAutoDsl.auto(drive, a -> a
 
 | Method | Step added |
 | ------ | ---------- |
-| `follow(path)` | Follow the `PathChain` at full power; the step ends when the follower is done |
-| `follow(path, maxPower)` | Same, with capped power |
-| `waitUntilDriveIdle()` | Block until the follower reports not busy — use after `parallel(...)` blocks that contain a follow |
+| `follow(path)` | Follow the `Path` at the follower's configured speed; the step ends when the follower is done |
+| `follow(path, maxSpeed)` | Same, capped for this path only (a fraction of top speed) |
+| `waitUntilDriveIdle()` | Block until the follower has settled after its path — use after `parallel(...)` blocks that contain a follow |
 
 ### Actions & commands
 
@@ -51,7 +51,7 @@ Command auto = PedroAutoDsl.auto(drive, a -> a
 ### Simple taxi
 
 ```java
-public static Command simpleTaxi(PedroSubsystem drive, PathChain taxiPath) {
+public static Command simpleTaxi(PedroSubsystem drive, Path taxiPath) {
     return PedroAutoDsl.auto(drive, auto -> auto
         .action(() -> System.out.println("auto:start"))
         .follow(taxiPath, 0.75)
@@ -65,8 +65,8 @@ public static Command simpleTaxi(PedroSubsystem drive, PathChain taxiPath) {
 ```java
 public static Command taxiAndCycle(PedroSubsystem drive,
                                    SampleIntakeHardware intake,
-                                   PathChain taxiPath,
-                                   PathChain cyclePath) {
+                                   Path taxiPath,
+                                   Path cyclePath) {
     return PedroAutoDsl.auto(drive, auto -> auto
         .follow(taxiPath, 0.8)
         .parallel(

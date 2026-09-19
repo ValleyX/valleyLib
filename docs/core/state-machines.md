@@ -366,7 +366,7 @@ See [Desktop Simulation & Testing](../guides/simulation-testing.md#controlling-t
         follower.update();
         switch (pathState) {
             case 0:
-                follower.followPath(toPickup);
+                follower.follow(toPickup);
                 intake.in();
                 pathState = 1;
                 break;
@@ -379,7 +379,7 @@ See [Desktop Simulation & Testing](../guides/simulation-testing.md#controlling-t
             case 2:
                 if (intake.hasGamePiece() || timer.seconds() > 1.5) {
                     intake.stop();
-                    follower.followPath(toScore);
+                    follower.follow(toScore);
                     pathState = 3;
                 }
                 break;

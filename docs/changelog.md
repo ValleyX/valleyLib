@@ -2,6 +2,29 @@
 
 All notable changes to ValleyLib. Versions correspond to Git tags consumed through JitPack.
 
+## 2.0.0 — 2026-09-19
+
+Moves the `pedro` package to **Pedro Pathing 3**. Pedro 3 is a breaking rewrite of the pathing API, so this release is breaking too — see the [Pedro 2 → Pedro 3 table](pedro/migration.md#first-pedro-2-pedro-3) for the full mapping. ValleyLib 1.0.8 remains the release for teams staying on Pedro 2.x.
+
+### Changed
+- **Dependencies**: `com.pedropathing:ftc:2.0.6` → `com.pedropathing:core:3.0.1` + `com.pedropathing:revhub:3.0.1` (Pedro 3 split the platform-agnostic follower from the REV-hub hardware layer). Both resolve from Maven Central, so the `maven.pedropathing.com` repository is no longer needed.
+- **`PathChain` → `Path`** throughout `PedroSubsystem`, `FollowPathCommand`, `PedroCommands`, and `PedroAutoDsl`.
+- **`maxPower` → `maxSpeed`**, and it means what it says. Pedro 3 removed `Follower.setMaxPower`; a cap is now `maxPathSpeed`, a fraction of the robot's maximum achievable *velocity*. `follow(path, maxSpeed)` attaches it to the path as a Pedro modifier, so Pedro reverts it when the path ends — an interrupted path can no longer leave the robot permanently slow. `setMaxPower(p)` is now `setMaxSpeed(p)`.
+- **`follow(path)` no longer forces full power.** It attaches no cap at all, leaving whatever your Pedro configuration sets.
+- `PedroSubsystem.stop()` is a plain action; `stopCommand()` is the command form. (The old `setMaxPower` was the only command factory with this shape, and `drive::stop` in `finallyDo(...)` silently built a command instead of stopping.)
+- `PedroMigrationSample` and `SampleAutos` rebuilt on the Pedro 3 `Paths` API.
+
+### Fixed
+- **An interrupted `FollowPathCommand` now stops the follower.** Because the follower lives in the subsystem and `periodic()` updates it every cycle, a preempted path used to keep driving — a teleop path binding that lost its requirement carried on to the end of its path.
+- **`waitUntilIdle()` no longer hangs.** Pedro 3 clears the follower's busy flag only while it holds the end of a path; with `holdEnd = false`, or after `stop()` or `manual(...)`, the flag never clears and the old `!follower.isBusy()` check waited forever. The rule now also reads the follower's mode.
+
+### Added
+- `FollowerState.isIdle(follower)` — the "is the drive done?" rule in one place, with tests against a real Pedro 3 `Follower`.
+- `PedroSubsystem.isIdle()`, `getPose()`, `withSpeedLimit(path, maxSpeed)`.
+
+### Removed
+- `com.pedropathing:telemetry:1.0.0` from the `api` dependencies. It is a Pedro 2-era artifact that ValleyLib never referenced. Pedro 3's companion is `com.pedropathing:tuning`; add it to your TeamCode project directly if you want Pedro's tuners.
+
 ## 1.0.8 — 2026-09-11
 
 ### Added

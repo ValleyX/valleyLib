@@ -101,4 +101,4 @@ The factory pattern — `static Command myAuto(subsystems..., paths...)` — kee
 
 1. Copy the files you want into your TeamCode package (adjust `package` lines).
 2. Rename `SampleDriveHardware`/`SampleIntakeHardware` to match your robot and hardware config names.
-3. For Pedro samples, create your `PedroSubsystem` subclass and Pedro `Constants` first — see [Command-Based Pedro](../pedro/overview.md).
+3. For Pedro samples, create your `PedroSubsystem` subclass and Pedro 3 `Constants` first — see [Command-Based Pedro](../pedro/overview.md).
